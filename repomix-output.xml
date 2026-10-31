@@ -1,0 +1,2460 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.figma/
+  make/
+    analyze-routes
+    deploy
+    deploy-preview
+    dev
+    dev.json
+    format
+    install
+    langserver
+    site.json
+  README.md
+public/
+  favicon.svg
+src/
+  App.tsx
+  index.css
+  main.tsx
+  vite-env.d.ts
+.gitattributes
+.gitignore
+.mise.toml
+AGENTS.md
+CLAUDE.md
+index.html
+package.json
+tsconfig.json
+vite.config.ts
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".figma/make/analyze-routes">
+#!/usr/bin/env bash
+set -euo pipefail
+
+exec figma-analyze routes "$@"
+</file>
+
+<file path=".figma/make/deploy">
+#!/usr/bin/env bash
+set -euo pipefail
+pnpm run build
+figma make deploy --build-dir dist
+</file>
+
+<file path=".figma/make/deploy-preview">
+#!/usr/bin/env bash
+set -euo pipefail
+# Build in development mode to emit sourcemaps.
+pnpm run build --mode development
+figma make deploy-preview --build-dir dist
+</file>
+
+<file path=".figma/make/dev">
+#!/usr/bin/env bash
+set -euo pipefail
+
+pnpm run dev
+</file>
+
+<file path=".figma/make/dev.json">
+{
+  // Files whose changes trigger the install script + dev server restart.
+  // Glob syntax: doublestar (supports **, *, ?, [abc], {a,b}). Paths are
+  // repo-relative and case-sensitive. `.mise.toml` and the scripts under
+  // `.figma/make/` are always watched regardless of these lists.
+  //
+  // Each key accepts a shorthand array of globs:
+  //   "installOn": ["package.json"]
+  // or an object with includes/excludes:
+  //   "installOn": { "includes": ["**/*.json"], "excludes": ["test/**"] }
+  //
+  // Only list files that affect the *toolchain or dependency tree* here —
+  // NOT application source files. Vite's dev server already watches
+  // application code (src/**/*) and config (vite.config.ts) via its own HMR
+  // pipeline, so including them here would cause a redundant full restart.
+  "installOn": [
+    "package.json"
+  ],
+  // Files whose changes trigger only a dev server restart (no install).
+  "restartOn": []
+}
+</file>
+
+<file path=".figma/make/format">
+#!/usr/bin/env bash
+set -euo pipefail
+
+pnpm run format -- "$@"
+</file>
+
+<file path=".figma/make/install">
+#!/usr/bin/env bash
+set -euo pipefail
+
+pnpm install --prefer-offline --no-frozen-lockfile
+</file>
+
+<file path=".figma/make/langserver">
+#!/usr/bin/env bash
+set -euo pipefail
+exec pnpm dlx --package=@vtsls/language-server@^0.3.0 vtsls --stdio
+</file>
+
+<file path=".figma/README.md">
+# Figma Make and Code Layers files
+
+This directory contains scripts, configuration, and generated files that Figma
+Make and Code Layers use to install dependencies, run your app, build previews,
+and publish your site.
+
+Commit this directory to your repository so Figma Make and Code Layers can reuse
+it the next time this repository is imported and start your preview server right
+away, without setting up the project from scratch.
+
+To learn more about these files, see
+[Use Git with Figma Make and code layers](https://help.figma.com/hc/en-us/articles/44220165255063-Use-Git-with-Figma-Make-and-code-layers#h_01M5X47F86RN1RW0F8565KZHB8)
+in the Figma Help Center.
+</file>
+
+<file path="public/favicon.svg">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 2C0 0.895431 0.895431 0 2 0H14C15.1046 0 16 0.895431 16 2V14C16 15.1046 15.1046 16 14 16H2C0.895431 16 0 15.1046 0 14V2Z" fill="#2C2C2C"/>
+<path d="M9.50049 8.00043C9.77637 8.00071 10.0012 8.22457 9.99463 8.50043C9.96213 9.8546 9.7985 11.0857 9.54346 12.0209C9.40139 12.5418 9.22308 13.0001 9.00439 13.3393C8.80014 13.656 8.47201 14.0002 8.00049 14.0004C7.52881 14.0004 7.20092 13.6561 6.99658 13.3393C6.77785 13.0001 6.59961 12.5419 6.45752 12.0209C6.41638 11.8701 6.37825 11.7109 6.34229 11.5453C6.27454 11.2324 6.52935 10.9512 6.84912 10.9682C7.07892 10.9808 7.27644 11.1479 7.32666 11.3725C7.35676 11.5072 7.38904 11.6361 7.42236 11.7582C7.55165 12.2322 7.69634 12.58 7.83643 12.7973C7.91904 12.9251 8.08204 12.9253 8.16455 12.7973C8.3046 12.58 8.44937 12.2321 8.57861 11.7582C8.80619 10.9237 8.96224 9.78447 8.99463 8.50043C9.00164 8.22442 9.22438 8.00043 9.50049 8.00043ZM4.45361 6.34222C4.76614 6.27474 5.04808 6.52962 5.03174 6.84906C5.01983 7.07908 4.85213 7.27706 4.62744 7.32758C4.49318 7.35763 4.36448 7.39007 4.24268 7.42328C3.76898 7.5525 3.42095 7.69733 3.20361 7.83734C3.07577 7.91994 3.07564 8.08295 3.20361 8.16547C3.42098 8.30545 3.76908 8.45035 4.24268 8.57953C5.06635 8.8041 6.1872 8.95849 7.45068 8.99359H7.50732C7.78036 8.99773 8.00026 9.22052 8.00049 9.49359C8.00049 9.77226 7.77223 9.99805 7.49365 9.99457L7.42529 9.99359C6.10096 9.95695 4.89787 9.79462 3.97998 9.54437C3.45924 9.40235 3.00083 9.2239 2.66162 9.00531C2.3449 8.80105 1.99975 8.47295 1.99951 8.0014C1.99951 7.5297 2.34485 7.20184 2.66162 6.9975C3.00082 6.77886 3.45918 6.60048 3.97998 6.45844C4.13019 6.41748 4.28885 6.37812 4.45361 6.34222ZM8.50439 6.00726C9.85692 6.04001 11.0867 6.20364 12.021 6.45844C12.5418 6.60051 13.0002 6.77882 13.3394 6.9975C13.656 7.20186 14.0005 7.52988 14.0005 8.0014C14.0003 8.47278 13.656 8.80103 13.3394 9.00531C13.0002 9.22394 12.5417 9.40232 12.021 9.54437C11.8706 9.58539 11.7114 9.62294 11.5464 9.65863C11.2335 9.72604 10.9518 9.47149 10.9683 9.15179C10.9802 8.92168 11.1476 8.72417 11.3726 8.67426C11.5071 8.64445 11.6363 8.61279 11.7583 8.57953C12.2319 8.45031 12.5801 8.30547 12.7974 8.16547C12.9254 8.08263 12.9253 7.92026 12.7974 7.83734C12.5801 7.6973 12.232 7.55253 11.7583 7.42328C10.9347 7.19865 9.81387 7.04436 8.55029 7.00922L8.49658 7.00824C8.22144 7.00417 8.00049 6.77955 8.00049 6.50433C8.00059 6.22632 8.22643 6.00054 8.50439 6.00726ZM8.00049 2.00043C8.47201 2.00068 8.80014 2.34484 9.00439 2.66156C9.22308 3.0008 9.40139 3.45901 9.54346 3.97992C9.58443 4.13018 9.623 4.28869 9.65869 4.45355C9.72599 4.76622 9.47034 5.04793 9.15088 5.03168C8.92087 5.01966 8.72334 4.85222 8.67334 4.62738C8.64352 4.49302 8.61184 4.36445 8.57861 4.24261C8.44937 3.76878 8.3046 3.4209 8.16455 3.20355C8.08171 3.07508 7.91936 3.07524 7.83643 3.20355C7.69634 3.42086 7.55165 3.76869 7.42236 4.24261C7.19477 5.07713 7.03874 6.21632 7.00635 7.50043C6.99935 7.77627 6.77636 8.00015 6.50049 8.00043C6.22437 8.00043 5.99976 7.77646 6.00635 7.50043C6.03885 6.1462 6.20246 4.91521 6.45752 3.97992C6.59961 3.45895 6.77785 3.0008 6.99658 2.66156C7.20092 2.3448 7.52881 2.00044 8.00049 2.00043Z" fill="white"/>
+</svg>
+</file>
+
+<file path="src/main.tsx">
+import React from "react"
+import ReactDOM from "react-dom/client"
+import App from "./App"
+import "./index.css"
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+</file>
+
+<file path="src/vite-env.d.ts">
+/// <reference types="vite/client" />
+</file>
+
+<file path=".gitattributes">
+# Git LFS Tracking Rules
+# Generated for binary, large, and non-diffable file types
+
+# ---------------------------------------------------------------------------
+# Images & Graphics
+# ---------------------------------------------------------------------------
+*.png                filter=lfs diff=lfs merge=lfs -text
+*.jpg                filter=lfs diff=lfs merge=lfs -text
+*.jpeg               filter=lfs diff=lfs merge=lfs -text
+*.gif                filter=lfs diff=lfs merge=lfs -text
+*.bmp                filter=lfs diff=lfs merge=lfs -text
+*.tiff               filter=lfs diff=lfs merge=lfs -text
+*.tif                filter=lfs diff=lfs merge=lfs -text
+*.ico                filter=lfs diff=lfs merge=lfs -text
+*.webp               filter=lfs diff=lfs merge=lfs -text
+*.psd                filter=lfs diff=lfs merge=lfs -text
+*.ai                 filter=lfs diff=lfs merge=lfs -text
+*.sketch             filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# Video
+# ---------------------------------------------------------------------------
+*.mp4                filter=lfs diff=lfs merge=lfs -text
+*.mov                filter=lfs diff=lfs merge=lfs -text
+*.avi                filter=lfs diff=lfs merge=lfs -text
+*.mkv                filter=lfs diff=lfs merge=lfs -text
+*.wmv                filter=lfs diff=lfs merge=lfs -text
+*.flv                filter=lfs diff=lfs merge=lfs -text
+*.webm               filter=lfs diff=lfs merge=lfs -text
+*.m4v                filter=lfs diff=lfs merge=lfs -text
+*.mpg                filter=lfs diff=lfs merge=lfs -text
+*.mpeg               filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# Audio
+# ---------------------------------------------------------------------------
+*.mp3                filter=lfs diff=lfs merge=lfs -text
+*.wav                filter=lfs diff=lfs merge=lfs -text
+*.flac               filter=lfs diff=lfs merge=lfs -text
+*.aac                filter=lfs diff=lfs merge=lfs -text
+*.ogg                filter=lfs diff=lfs merge=lfs -text
+*.m4a                filter=lfs diff=lfs merge=lfs -text
+*.wma                filter=lfs diff=lfs merge=lfs -text
+*.aiff               filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# 3D & Game Assets
+# ---------------------------------------------------------------------------
+*.fbx                filter=lfs diff=lfs merge=lfs -text
+*.obj                filter=lfs diff=lfs merge=lfs -text
+*.blend              filter=lfs diff=lfs merge=lfs -text
+*.dae                filter=lfs diff=lfs merge=lfs -text
+*.3ds                filter=lfs diff=lfs merge=lfs -text
+*.max                filter=lfs diff=lfs merge=lfs -text
+*.unity              filter=lfs diff=lfs merge=lfs -text
+*.unitypackage       filter=lfs diff=lfs merge=lfs -text
+*.uasset             filter=lfs diff=lfs merge=lfs -text
+*.umap               filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# Archives & Compressed Files
+# ---------------------------------------------------------------------------
+*.zip                filter=lfs diff=lfs merge=lfs -text
+*.tar                filter=lfs diff=lfs merge=lfs -text
+*.gz                 filter=lfs diff=lfs merge=lfs -text
+*.bz2                filter=lfs diff=lfs merge=lfs -text
+*.7z                 filter=lfs diff=lfs merge=lfs -text
+*.rar                filter=lfs diff=lfs merge=lfs -text
+*.tgz                filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# Documents & Fonts
+# ---------------------------------------------------------------------------
+*.pdf                filter=lfs diff=lfs merge=lfs -text
+*.docx               filter=lfs diff=lfs merge=lfs -text
+*.xlsx               filter=lfs diff=lfs merge=lfs -text
+*.pptx               filter=lfs diff=lfs merge=lfs -text
+*.ttf                filter=lfs diff=lfs merge=lfs -text
+*.otf                filter=lfs diff=lfs merge=lfs -text
+*.woff               filter=lfs diff=lfs merge=lfs -text
+*.woff2              filter=lfs diff=lfs merge=lfs -text
+*.eot                filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# Data & Machine Learning
+# ---------------------------------------------------------------------------
+*.parquet            filter=lfs diff=lfs merge=lfs -text
+*.hdf5               filter=lfs diff=lfs merge=lfs -text
+*.h5                 filter=lfs diff=lfs merge=lfs -text
+*.pkl                filter=lfs diff=lfs merge=lfs -text
+*.pickle             filter=lfs diff=lfs merge=lfs -text
+*.npy                filter=lfs diff=lfs merge=lfs -text
+*.npz                filter=lfs diff=lfs merge=lfs -text
+*.bin                filter=lfs diff=lfs merge=lfs -text
+*.pt                 filter=lfs diff=lfs merge=lfs -text
+*.pth                filter=lfs diff=lfs merge=lfs -text
+*.onnx               filter=lfs diff=lfs merge=lfs -text
+*.pb                 filter=lfs diff=lfs merge=lfs -text
+*.safetensors        filter=lfs diff=lfs merge=lfs -text
+*.gguf               filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# Databases
+# ---------------------------------------------------------------------------
+*.db                 filter=lfs diff=lfs merge=lfs -text
+*.sqlite             filter=lfs diff=lfs merge=lfs -text
+*.sqlite3            filter=lfs diff=lfs merge=lfs -text
+*.mdb                filter=lfs diff=lfs merge=lfs -text
+*.accdb              filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# Executables & Libraries
+# ---------------------------------------------------------------------------
+*.exe                filter=lfs diff=lfs merge=lfs -text
+*.dll                filter=lfs diff=lfs merge=lfs -text
+*.so                 filter=lfs diff=lfs merge=lfs -text
+*.dylib              filter=lfs diff=lfs merge=lfs -text
+*.a                  filter=lfs diff=lfs merge=lfs -text
+*.lib                filter=lfs diff=lfs merge=lfs -text
+*.wasm               filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# Build Artifacts & Packages
+# ---------------------------------------------------------------------------
+*.jar                filter=lfs diff=lfs merge=lfs -text
+*.war                filter=lfs diff=lfs merge=lfs -text
+*.ear                filter=lfs diff=lfs merge=lfs -text
+*.apk                filter=lfs diff=lfs merge=lfs -text
+*.ipa                filter=lfs diff=lfs merge=lfs -text
+*.deb                filter=lfs diff=lfs merge=lfs -text
+*.rpm                filter=lfs diff=lfs merge=lfs -text
+*.dmg                filter=lfs diff=lfs merge=lfs -text
+*.iso                filter=lfs diff=lfs merge=lfs -text
+*.img                filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# CAD & Scientific
+# ---------------------------------------------------------------------------
+*.dwg                filter=lfs diff=lfs merge=lfs -text
+*.dxf                filter=lfs diff=lfs merge=lfs -text
+*.step               filter=lfs diff=lfs merge=lfs -text
+*.stp                filter=lfs diff=lfs merge=lfs -text
+*.iges               filter=lfs diff=lfs merge=lfs -text
+*.stl                filter=lfs diff=lfs merge=lfs -text
+*.nc                 filter=lfs diff=lfs merge=lfs -text
+*.mat                filter=lfs diff=lfs merge=lfs -text
+</file>
+
+<file path=".gitignore">
+node_modules/
+dist/
+build/
+.cache/
+.env*
+.vite/
+vite.config.*.timestamp-*
+*.tsbuildinfo
+*-debug.log*
+logs/
+*.log
+.claude-replay.*
+.tmp-*
+/.figma/design-context/
+
+# Platform-managed agentplat state, not project source. In the
+# client-initiated single-repo workspace layout (make's `Path: "."` spec) the
+# repo root IS the workspace root, so these land inside this repo rather than
+# beside it.
+/.plugins/
+/.opencode-skills/
+</file>
+
+<file path=".mise.toml">
+[tools]
+node = "22"
+"npm:pnpm" = "10.34.3"
+</file>
+
+<file path="AGENTS.md">
+# figma-make-app
+
+React + Vite + Tailwind CSS project running inside Figma Make.
+
+## Development Server
+
+A Vite development server is **already running** on `$PORT` (default 8443). You don't need to start it manually.
+
+- Preview URL: The user can access the running app through the preview panel
+- Hot reload: Changes to source files are reflected immediately
+
+## Project Structure
+
+This is the canonical project structure. Start with task-relevant files below. Only follow imports or inspect other files when required, when a documented path is missing, or when the repository contradicts this guide.
+
+- `src/main.tsx` - React entrypoint; imports `src/index.css` and mounts `src/App.tsx` into the `#root` element
+- `src/App.tsx` - Primary application component and the usual starting point for UI work
+- `src/index.css` - Global CSS entrypoint and Tailwind CSS v4 import
+- `index.html` - Vite HTML shell containing the `#root` element and loading `src/main.tsx`
+- `package.json` - Project dependencies and the Vite build, development, preview, and formatting scripts
+- `vite.config.ts` - Vite configuration with React, Tailwind CSS v4, and Figma Make plugins plus the `@` alias for `src`
+- `.mise.toml` - Toolchain versions for Node.js and pnpm
+
+## Dependencies
+
+- Runtime: React 19 and React DOM 19
+- Styling: Tailwind CSS v4 with the `@tailwindcss/vite` plugin
+- Build tooling: Vite 8, TypeScript 5.7, and `@vitejs/plugin-react`
+- Formatting: oxfmt
+
+## Styling
+
+This project uses **Tailwind CSS v4** through the `@tailwindcss/vite` plugin configured in `vite.config.ts`. `src/index.css` imports Tailwind with `@import 'tailwindcss';`. Use Tailwind utility classes directly in JSX and put global CSS or Tailwind v4 theme customization in `src/index.css`. This scaffold does not need a Tailwind config file or PostCSS config.
+
+`src/main.tsx` imports `src/index.css`, so global font wiring belongs in `src/index.css`. Keep CSS `@import` statements first, then add any `@font-face` rules and font-family defaults there.
+
+Tailwind emits utility classes in `@layer utilities`, and CSS outside any cascade layer overrides every layer regardless of specificity. Put global element styles, such as resets and defaults for `body`, headings, `button`, or `input`, inside `@layer base { ... }` so utility classes on those elements still apply. Tailwind's Preflight already applies `box-sizing: border-box`, removes default margins, and sets `font: inherit` on form controls, so do not repeat those rules.
+</file>
+
+<file path="CLAUDE.md">
+@AGENTS.md
+</file>
+
+<file path="package.json">
+{
+  "name": "figma-make-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "oxfmt"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.0",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "oxfmt": "^0.2.0",
+    "typescript": "^5.7.0",
+    "vite": "^8.0.5"
+  }
+}
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "types": ["node"],
+    "strict": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", "vite.config.ts"]
+}
+</file>
+
+<file path="vite.config.ts">
+import { defineConfig, type HtmlTagDescriptor, type Plugin } from "vite"
+import react from "@vitejs/plugin-react"
+import tailwindcss from "@tailwindcss/vite"
+import fs from "node:fs"
+import path from "node:path"
+
+import siteConfiguration from "./.figma/make/site.json"
+
+// Vite config — https://vitejs.dev/config/
+export default defineConfig(({ mode }) => {
+  // .figma/make/deploy-preview passes `--mode development` for cached-preview builds.
+  const emitSourcemaps = mode === "development"
+
+  return {
+    base: process.env.FIGMA_PUBLIC_URL
+      ? `${process.env.FIGMA_PUBLIC_URL}/`
+      : "/",
+    build: {
+      sourcemap: emitSourcemaps ? "inline" : false,
+      minify: !emitSourcemaps,
+    },
+    plugins: [
+      react(),
+      tailwindcss(),
+      figmaSiteConfiguration(siteConfiguration),
+      figmaErrorOverlayReplay(),
+      figmaReactRefreshBoundaryFallback(),
+      figmaMakeKitPlugin({ storiesGlob: "/src/**/*.stories.{ts,tsx,js,jsx}" }),
+      figmaLinkedPackageSourcemaps(),
+    ],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+    },
+    server: {
+      host: process.env.FIGMA_DEV_SERVER_HOST || "0.0.0.0",
+      port: parseInt(process.env.PORT || "8443"),
+      strictPort: true,
+      watch: {
+        ignored: ["**/.figma/**"],
+      },
+    },
+    preview: {
+      host: process.env.FIGMA_DEV_SERVER_HOST || "0.0.0.0",
+      port: parseInt(process.env.PORT || "8443"),
+    },
+  }
+})
+
+type FigmaSiteConfiguration = {
+  title?: string
+  description?: string
+  language?: string
+  robots?: {
+    index?: boolean
+  }
+  icons?: {
+    icon?: string
+  }
+  openGraph?: {
+    image?: string
+  }
+  analytics?: {
+    googleAnalyticsId?: string
+  }
+  customScripts?: {
+    headStart?: string
+    headEnd?: string
+    bodyStart?: string
+    bodyEnd?: string
+  }
+  accessibility?: {
+    addBypassLinks?: boolean
+  }
+}
+
+/** Applies /.figma/make/site.json to the generated document shell. */
+function figmaSiteConfiguration(config: FigmaSiteConfiguration): Plugin {
+  function sanitizeHtmlValue(value: string | undefined): string {
+    return value?.replace(/[^a-zA-Z0-9_-]/g, "") || ""
+  }
+  function escapeHtmlText(value: string): string {
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+  }
+  function replaceHtmlCommentSlot(
+    html: string,
+    slotName: string,
+    content: string,
+  ): string {
+    return html.replace(`<!-- ${slotName} -->`, content)
+  }
+
+  const title = config.title ?? "Figma Make App"
+  const description = config.description ?? ""
+  // Imported HTML keeps its own favicon; new Makes default to the Make product icon.
+  const favicon = config.icons?.icon ?? "/favicon.svg"
+  const socialImage = config.openGraph?.image ?? ""
+  const language = sanitizeHtmlValue(config.language) || "en"
+  const googleAnalyticsId = sanitizeHtmlValue(
+    config.analytics?.googleAnalyticsId,
+  )
+  const headStart = config.customScripts?.headStart ?? ""
+  const headEnd = config.customScripts?.headEnd ?? ""
+  const bodyStart = config.customScripts?.bodyStart ?? ""
+  const bodyEnd = config.customScripts?.bodyEnd ?? ""
+  const robotsTxt =
+    config.robots?.index === false ? "User-agent: *\nDisallow: /\n" : ""
+
+  return {
+    name: "figma-site-configuration",
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (!robotsTxt || req.url?.split("?")[0] !== "/robots.txt")
+          return next()
+
+        res.setHeader("Content-Type", "text/plain; charset=utf-8")
+        res.end(robotsTxt)
+      })
+    },
+    generateBundle() {
+      if (!robotsTxt) return
+
+      this.emitFile({
+        type: "asset",
+        fileName: "robots.txt",
+        source: robotsTxt,
+      })
+    },
+    transformIndexHtml: {
+      order: "pre",
+      handler(html) {
+        let result = html
+        result = replaceHtmlCommentSlot(result, "figma:lang", language)
+        result = replaceHtmlCommentSlot(
+          result,
+          "figma:title",
+          escapeHtmlText(title),
+        )
+        result = replaceHtmlCommentSlot(result, "figma:head-start", headStart)
+        result = replaceHtmlCommentSlot(result, "figma:head-end", headEnd)
+        result = replaceHtmlCommentSlot(result, "figma:body-start", bodyStart)
+        result = replaceHtmlCommentSlot(result, "figma:body-end", bodyEnd)
+
+        const tags: HtmlTagDescriptor[] = []
+        if (description) {
+          tags.push({
+            tag: "meta",
+            attrs: { name: "description", content: description },
+            injectTo: "head",
+          })
+        }
+        if (config.robots?.index === false) {
+          tags.push({
+            tag: "meta",
+            attrs: { name: "robots", content: "noindex, nofollow" },
+            injectTo: "head",
+          })
+        }
+        if (favicon) {
+          tags.push({
+            tag: "link",
+            attrs: { rel: "icon", href: favicon },
+            injectTo: "head",
+          })
+        }
+        if (title) {
+          tags.push({
+            tag: "meta",
+            attrs: { property: "og:title", content: title },
+            injectTo: "head",
+          })
+        }
+        if (description) {
+          tags.push({
+            tag: "meta",
+            attrs: { property: "og:description", content: description },
+            injectTo: "head",
+          })
+        }
+        if (socialImage) {
+          tags.push(
+            {
+              tag: "meta",
+              attrs: { property: "og:image", content: socialImage },
+              injectTo: "head",
+            },
+            {
+              tag: "meta",
+              attrs: { name: "twitter:card", content: "summary_large_image" },
+              injectTo: "head",
+            },
+            {
+              tag: "meta",
+              attrs: { name: "twitter:image", content: socialImage },
+              injectTo: "head",
+            },
+          )
+        }
+
+        if (googleAnalyticsId) {
+          tags.push(
+            {
+              tag: "script",
+              attrs: {
+                async: true,
+                src: `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`,
+              },
+              injectTo: "head",
+            },
+            {
+              tag: "script",
+              children: `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', ${JSON.stringify(googleAnalyticsId)});
+`,
+              injectTo: "head",
+            },
+          )
+        }
+
+        if (config.accessibility?.addBypassLinks) {
+          tags.push(
+            {
+              tag: "style",
+              children: `
+  .figma-bypass-link {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    z-index: 2147483647;
+    transform: translateY(-150%);
+    border-radius: 6px;
+    background: #111827;
+    color: #fff;
+    padding: 8px 12px;
+    font: 600 14px/1.2 system-ui, sans-serif;
+    text-decoration: none;
+  }
+  .figma-bypass-link:focus {
+    transform: translateY(0);
+  }
+`,
+              injectTo: "head",
+            },
+            {
+              tag: "a",
+              attrs: { class: "figma-bypass-link", href: "#root" },
+              children: "Skip to content",
+              injectTo: "body-prepend",
+            },
+          )
+        }
+
+        return {
+          html: result,
+          tags,
+        }
+      },
+    },
+  }
+}
+
+/**
+ * Replay the most recent build error to clients that connect after
+ * it was first broadcast. Vite buffers an error payload only while
+ * no clients are connected and clears the buffer on the first
+ * reconnect (see `bufferedMessage` in `createWebSocketServer`), so
+ * if the preview iframe reloads after Vite already delivered an
+ * error to a live socket, the new socket misses the payload and
+ * the overlay stays hidden even though the build is still broken.
+ * We intercept `ws.send` to remember the latest error and replay
+ * it on every new connection; the cache clears on a successful
+ * `update` or `full-reload` so a stale overlay can't survive a
+ * fixed build.
+ */
+function figmaErrorOverlayReplay(): Plugin {
+  return {
+    name: "figma-error-overlay-replay",
+    apply: "serve",
+    configureServer(server) {
+      let lastError: object | null = null
+
+      const origSend = server.ws.send.bind(server.ws) as (
+        ...args: any[]
+      ) => void
+      server.ws.send = (((...args: any[]) => {
+        const payload = args[0]
+        if (payload && typeof payload === "object" && !Array.isArray(payload)) {
+          const type = (payload as { type?: string }).type
+          if (type === "error") {
+            lastError = (payload as object)
+          } else if (type === "update" || type === "full-reload") {
+            lastError = null
+          }
+        }
+        return origSend(...args)
+      }) as typeof server.ws.send)
+
+      server.ws.on("connection", (socket) => {
+        if (lastError !== null) {
+          socket.send(JSON.stringify(lastError))
+        }
+      })
+    },
+  }
+}
+
+/**
+ * Reload when a module that previously defined a React Refresh boundary stops
+ * defining one. This happens when an agent moves a component into a new file
+ * and replaces the old module with a re-export:
+ *
+ *   export { default } from './app/App'
+ *
+ * Vite otherwise accepts the update using the previous module's HMR boundary,
+ * but the re-export-only transform no longer registers a replacement for the
+ * mounted component family. React reports a successful refresh while leaving
+ * the old tree mounted until the page is reloaded.
+ */
+function figmaReactRefreshBoundaryFallback(): Plugin {
+  type ModuleNode = import("vite").ModuleNode
+  const hadRefreshBoundary = new Map<string, boolean>()
+  const lostRefreshBoundaries = new Set<string>()
+  let sendFullReload: (() => void) | null = null
+
+  return {
+    name: "figma-react-refresh-boundary-fallback",
+    apply: "serve",
+    enforce: "post",
+    configureServer(server) {
+      sendFullReload = () => server.ws.send({ type: "full-reload", path: "*" })
+    },
+    handleHotUpdate({ modules, server, timestamp }) {
+      if (lostRefreshBoundaries.size === 0) return
+
+      const visited = new Set<ModuleNode>()
+      const pending = [...modules]
+      while (pending.length > 0) {
+        const current = pending.pop()
+        if (!current || visited.has(current)) continue
+        visited.add(current)
+
+        const moduleId = current.id?.split("?")[0]
+        if (moduleId && lostRefreshBoundaries.has(moduleId)) {
+          const invalidated = new Set<ModuleNode>()
+          for (const updatedModule of modules) {
+            server.moduleGraph.invalidateModule(
+              updatedModule,
+              invalidated,
+              timestamp,
+              true,
+            )
+          }
+          sendFullReload?.()
+          return []
+        }
+
+        pending.push(...current.importers)
+      }
+    },
+    transform(code, id) {
+      if (!/\.[jt]sx?(?:\?|$)/.test(id) || id.includes("/node_modules/"))
+        return null
+
+      const moduleId = id.split("?")[0] ?? id
+      const hasRefreshBoundary = code.includes("registerExportsForReactRefresh")
+      const previousHadRefreshBoundary = hadRefreshBoundary.get(moduleId)
+      hadRefreshBoundary.set(moduleId, hasRefreshBoundary)
+
+      if (hasRefreshBoundary) lostRefreshBoundaries.delete(moduleId)
+      if (previousHadRefreshBoundary && !hasRefreshBoundary) {
+        lostRefreshBoundaries.add(moduleId)
+        queueMicrotask(() => sendFullReload?.())
+      }
+
+      return null
+    },
+  }
+}
+
+/**
+ * Serves a blank render-target page at /.figma/make/kit.html that
+ * the Figma preview script drives directly. The page exposes a
+ * registry of every file matching `storiesGlob` on
+ * window.__FIGMA__.stories so the design surface can dynamically
+ * import + mount each entry into its own grid view.
+ *
+ * Dev-only: `apply: 'serve'` gates the plugin to `vite dev`. Prod
+ * builds (`vite build`) skip it entirely so the route doesn't leak
+ * into shipped bundles.
+ */
+function figmaMakeKitPlugin(options: {
+  storiesGlob: string | string[]
+}): Plugin {
+  const storiesGlob = Array.isArray(options.storiesGlob)
+    ? options.storiesGlob
+    : [options.storiesGlob]
+  const ROUTE = "/.figma/make/kit.html"
+  const VIRTUAL_ID = "virtual:figma-stories"
+  const RESOLVED_ID = "\0" + VIRTUAL_ID
+  const STORIES_MODULE = `export const stories = import.meta.glob(${JSON.stringify(storiesGlob)})`
+  const HTML_BOOTSTRAP = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+<div id="figma-make-kit-root"></div>
+<script type="module">
+  import { stories } from 'virtual:figma-stories'
+  window.__FIGMA__ = Object.assign(window.__FIGMA__ ?? {}, { stories })
+  window.dispatchEvent(new CustomEvent('figma.ready'))
+</script>
+</body>
+</html>`
+
+  return {
+    name: "figma-make-kit",
+    apply: "serve",
+    resolveId(id) {
+      if (id === VIRTUAL_ID) return RESOLVED_ID
+      return null
+    },
+    load(id) {
+      if (id !== RESOLVED_ID) return null
+      return STORIES_MODULE
+    },
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const url = req.url || ""
+        if (url.split("?")[0] !== ROUTE) return next()
+
+        try {
+          res.setHeader("Content-Type", "text/html")
+          res.end(await server.transformIndexHtml(url, HTML_BOOTSTRAP))
+        } catch (err) {
+          next(err as Error)
+        }
+      })
+    },
+  }
+}
+
+/**
+ * Reports the sources of dependencies linked from outside node_modules (pnpm
+ * or npm workspaces, `file:`, `link:`) under `node_modules/<name>/`, the way
+ * installed packages appear in sourcemaps. Vite otherwise reports their real
+ * path, such as `libraries/<name>/`.
+ */
+function figmaLinkedPackageSourcemaps(): Plugin {
+  const packageJson = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, "package.json"), "utf8"),
+  )
+  const linkedPackages = Object.keys({
+    ...packageJson.dependencies,
+    ...packageJson.devDependencies,
+  }).flatMap((name) => {
+    const installedDir = path.resolve(__dirname, "node_modules", name)
+    try {
+      const realDir = fs.realpathSync(installedDir)
+      return realDir.split(path.sep).includes("node_modules")
+        ? []
+        : [{ installedDir, realDir }]
+    } catch {
+      return []
+    }
+  })
+  const sourceMappingUrl = /\/\/# sourceMappingURL=(\S+)\s*$/
+
+  function installedPath(file: string) {
+    const linked = linkedPackages.find(({ realDir }) =>
+      file.startsWith(realDir + path.sep),
+    )
+    return (
+      linked &&
+      path.join(linked.installedDir, path.relative(linked.realDir, file))
+    )
+  }
+  function readSourceMap(file: string, code: string) {
+    const url = sourceMappingUrl.exec(code)?.[1]
+    try {
+      if (url?.startsWith("data:")) {
+        return {
+          map: JSON.parse(Buffer.from(url.split(",")[1], "base64").toString()),
+          mapDir: path.dirname(file),
+        }
+      }
+      if (url) {
+        const mapFile = path.resolve(path.dirname(file), url)
+        return {
+          map: JSON.parse(fs.readFileSync(mapFile, "utf8")),
+          mapDir: path.dirname(mapFile),
+        }
+      }
+    } catch {}
+    // Without a usable input map, map every line to itself.
+    const mappings = code.split("\n").map((_, i) => (i ? "AACA" : "AAAA"))
+    const map = {
+      version: 3,
+      sources: [file],
+      sourcesContent: [code],
+      names: [],
+      mappings: mappings.join(";"),
+    }
+    return { map, mapDir: path.dirname(file) }
+  }
+
+  return {
+    name: "figma-linked-package-sourcemaps",
+    enforce: "pre",
+    load(id) {
+      // Leave queried imports such as ?raw and ?url to Vite's own loaders.
+      if (id.includes("?") || !/\.[cm]?[jt]sx?$/.test(id) || !installedPath(id))
+        return null
+
+      const code = fs.readFileSync(id, "utf8")
+      const { map, mapDir } = readSourceMap(id, code)
+      const sourceRoot = path.resolve(mapDir, map.sourceRoot ?? "")
+      map.sources = map.sources.map((source: string) => {
+        const original = path.resolve(sourceRoot, source)
+        return installedPath(original) ?? original
+      })
+      delete map.sourceRoot
+      return { code: code.replace(sourceMappingUrl, ""), map }
+    },
+  }
+}
+</file>
+
+<file path=".figma/make/site.json">
+{
+  "title": "Responsive Mobile App",
+  "description": "A mobile-responsive app with clickable controls, designed for a smooth, focused experience on phones.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
+</file>
+
+<file path="src/App.tsx">
+import { useState, type ReactNode } from "react"
+
+type Page = "home" | "work" | "earn" | "team" | "profile"
+
+function Icon({
+  name,
+  size = 24,
+  strokeWidth = 2,
+}: {
+  name: string
+  size?: number
+  strokeWidth?: number
+}) {
+  const paths: Record<string, ReactNode> = {
+    home: (
+      <>
+        <path d="m3 11 9-8 9 8" />
+        <path d="M5 10v10h5v-6h4v6h5V10" />
+      </>
+    ),
+    work: (
+      <>
+        <path d="m4 8 8 4 8-4-8-4-8 4Z" />
+        <path d="M4 8v9l8 4 8-4V8M12 12v9" />
+      </>
+    ),
+    chart: (
+      <>
+        <path d="M5 20v-7M12 20V7M19 20V3" />
+      </>
+    ),
+    handshake: (
+      <>
+        <path d="m4 11 4-4 4 2 3-2 5 5" />
+        <path d="m2 9 4-4 3 2M22 9l-4-4-3 2M7 14l3 3 6-6M11 18l2 2 5-5" />
+      </>
+    ),
+    user: (
+      <>
+        <circle cx="12" cy="7" r="4" />
+        <path d="M4 21a8 8 0 0 1 16 0" />
+      </>
+    ),
+    users: (
+      <>
+        <circle cx="9" cy="8" r="3" />
+        <circle cx="17" cy="9" r="2.5" />
+        <path d="M3 20a6 6 0 0 1 12 0M14 15a5 5 0 0 1 7 4.5" />
+      </>
+    ),
+    wallet: (
+      <>
+        <path d="M4 6h14a2 2 0 0 1 2 2v11H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h11" />
+        <path d="M16 11h6v5h-6a2.5 2.5 0 0 1 0-5Z" />
+      </>
+    ),
+    coins: (
+      <>
+        <ellipse cx="9" cy="6" rx="5" ry="2.5" />
+        <path d="M4 6v5c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V6M4 11v5c0 1.4 2.2 2.5 5 2.5 1 0 2-.2 2.8-.5" />
+        <path d="M14 11c3 0 5 1 5 2.5V18c0 1.4-2.2 2.5-5 2.5S9 19.4 9 18v-1" />
+      </>
+    ),
+    gift: (
+      <>
+        <rect x="3" y="9" width="18" height="12" rx="2" />
+        <path d="M12 9v12M3 13h18M12 9H8.5a2.5 2.5 0 1 1 2.3-3.5L12 9Zm0 0h3.5a2.5 2.5 0 1 0-2.3-3.5L12 9Z" />
+      </>
+    ),
+    deposit: (
+      <>
+        <rect x="3" y="7" width="18" height="14" rx="2" />
+        <path d="M8 7V4h8v3M12 17V10M9 13l3-3 3 3" />
+      </>
+    ),
+    withdraw: (
+      <>
+        <rect x="3" y="3" width="18" height="14" rx="2" />
+        <path d="M8 17v3h8v-3M12 7v7M9 11l3 3 3-3" />
+      </>
+    ),
+    settings: (
+      <>
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z" />
+      </>
+    ),
+    bell: (
+      <>
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+        <path d="M10 21h4" />
+      </>
+    ),
+    calendar: (
+      <>
+        <rect x="3" y="5" width="18" height="16" rx="2" />
+        <path d="M8 3v4M16 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
+      </>
+    ),
+    check: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="m8 12 2.5 2.5L16 9" />
+      </>
+    ),
+    clock: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v6l4 2" />
+      </>
+    ),
+    target: (
+      <>
+        <circle cx="11" cy="13" r="8" />
+        <circle cx="11" cy="13" r="4" />
+        <path d="m13 11 8-8M16 3h5v5" />
+      </>
+    ),
+    cursor: (
+      <>
+        <path d="M7 3v10M7 8H5a2 2 0 0 0-2 2v3l4 7h8a4 4 0 0 0 4-4v-6a2 2 0 0 0-4 0V8a2 2 0 0 0-4 0V6a2 2 0 0 0-4 0" />
+      </>
+    ),
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      height={size}
+      viewBox="0 0 24 24"
+      width={size}
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={strokeWidth}
+    >
+      {paths[name] ?? paths.work}
+    </svg>
+  )
+}
+
+function AppHeader({ onNotice }: { onNotice: () => void }) {
+  return (
+    <header className="app-header">
+      <div className="avatar">
+        <Icon name="user" size={41} strokeWidth={1.7} />
+      </div>
+      <div className="identity">
+        <strong>
+          <span className="crown">♛</span> বরজাজ
+        </strong>
+        <span>পরিচয় সংখ্যা: ৫৮৯৯৬৩৮০</span>
+        <span>
+          <i className="diamond">◆</i> বিশিষ্ট স্তর ০
+        </span>
+      </div>
+      <button
+        className="notice-button"
+        aria-label="নোটিফিকেশন"
+        onClick={onNotice}
+      >
+        <Icon name="bell" size={30} />
+        <b />
+      </button>
+    </header>
+  )
+}
+
+const navItems: { id: Page icon: string label: string }[] = [
+  { id: "home", icon: "home", label: "মূল অফিস" },
+  { id: "work", icon: "work", label: "কর্মক্ষেত্র" },
+  { id: "earn", icon: "chart", label: "অর্জনের পথ" },
+  { id: "team", icon: "handshake", label: "সাফল্যের সঙ্গী" },
+  { id: "profile", icon: "user", label: "আমার পরিবার" },
+]
+
+function BottomNav({
+  page,
+  onChange,
+}: {
+  page: Page
+  onChange: (page: Page) => void
+}) {
+  return (
+    <nav className="bottom-nav" aria-label="প্রধান নেভিগেশন">
+      {navItems.map((item) => (
+        <button
+          className={page === item.id ? "active" : ""}
+          key={item.id}
+          onClick={() => onChange(item.id)}
+        >
+          <Icon name={item.icon} size={27} />
+          <span>{item.label}</span>
+        </button>
+      ))}
+    </nav>
+  )
+}
+
+const stats = [
+  ["coins", "কর্মক্ষেত্রের আয়", "৳ ২,৭২৬.৩৭"],
+  ["gift", "দলীয় প্রাপ্ত", "৳ ২৮০.০০"],
+  ["users", "দলীয় লভ্যাংশ", "৳ ২৪.৫০"],
+  ["chart", "আজকের অর্জন", "৳ ১,৪০০.৭৫"],
+  ["gift", "মোট জমা", "৳ ২,৬০০.০০"],
+  ["wallet", "মোট উত্তোলন", "৳ ২০০.০০"],
+]
+
+function HomePage({ action }: { action: (message: string) => void }) {
+  const menu = [
+    "সাধারণ হিসাবপত্র",
+    "জমার অর্ডার",
+    "কমিশন",
+    "লভ্যাংশ",
+    "উত্তোলন",
+    "স্টকের মূল্যায়ন",
+    "অ্যাপ ডাউনলোড",
+  ]
+  return (
+    <main className="home-page page-content">
+      <section className="balance-card">
+        <div className="wallet-mark">
+          <Icon name="wallet" size={37} />
+        </div>
+        <div>
+          <span>মোট সঞ্চয়</span>
+          <strong>৳ ১০২.০৩</strong>
+        </div>
+      </section>
+
+      <section className="stats-grid">
+        {stats.map(([icon, title, value]) => (
+          <div className="stat-cell" key={title}>
+            <span className="small-icon">
+              <Icon name={icon} size={23} />
+            </span>
+            <div>
+              <span>{title}</span>
+              <strong>{value}</strong>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <section className="quick-grid">
+        {[
+          ["deposit", "জমা করুন"],
+          ["withdraw", "উত্তোলন"],
+          ["users", "সঙ্গীগণ"],
+          ["settings", "বিন্যাস"],
+        ].map(([icon, label]) => (
+          <button
+            key={label}
+            onClick={() => action(`${label} নির্বাচন করা হয়েছে`)}
+          >
+            <span>
+              <Icon name={icon} size={34} />
+            </span>
+            <b>{label}</b>
+          </button>
+        ))}
+      </section>
+
+      <section className="menu-list">
+        {menu.map((item) => (
+          <button key={item} onClick={() => action(`${item} শীঘ্রই আসছে`)}>
+            <span>{item}</span>
+            <b>›</b>
+          </button>
+        ))}
+      </section>
+      <button
+        className="chat-button"
+        aria-label="সহায়তা"
+        onClick={() => action("সহায়তা বার্তা খোলা হয়েছে")}
+      >
+        <span>•••</span>
+        <b>১</b>
+      </button>
+    </main>
+  )
+}
+
+function GiftArtwork() {
+  return (
+    <div className="gift-art" aria-hidden="true">
+      <div className="gift-lid" />
+      <div className="gift-body" />
+      <div className="gift-ribbon" />
+      <div className="gift-bow">
+        <i />
+        <i />
+      </div>
+    </div>
+  )
+}
+
+function WorkPage({
+  claimed,
+  onGrab,
+}: {
+  claimed: boolean
+  onGrab: () => void
+}) {
+  return (
+    <main className="work-page page-content">
+      <section className="product-banner">
+        <span className="cube-round">
+          <Icon name="work" size={32} />
+        </span>
+        <div>
+          <strong>Product Grabbing System</strong>
+          <p>
+            আপনার ব্যালেন্স অনুযায়ী প্রোডাক্ট গ্রাব করুন
+            <br />
+            এবং প্রতি গ্রাবের জন্য কমিশন পান।
+          </p>
+        </div>
+        <GiftArtwork />
+        <em>
+          Grab
+          <br />
+          Earn
+          <br />
+          Grow
+        </em>
+      </section>
+
+      <section className="work-stats">
+        {[
+          ["wallet", "আমার ব্যালেন্স", "৳ ৫০২.০৩"],
+          ["coins", "প্রতি গ্রাব কমিশন", "৳ ১২৫.০০"],
+          ["users", "মোট গ্রাব সংখ্যা", claimed ? "৪" : "৩"],
+          ["calendar", "আজকের বাকি গ্রাব", claimed ? "১" : "২"],
+        ].map(([icon, title, value]) => (
+          <div key={title}>
+            <span>
+              <Icon name={icon} size={21} />
+            </span>
+            <small>{title}</small>
+            <b>{value}</b>
+          </div>
+        ))}
+      </section>
+
+      <section className="grab-card">
+        <div className="section-title">
+          <span>
+            <Icon name="work" size={25} />
+          </span>
+          <div>
+            <strong>প্রোডাক্ট গ্রাবিং</strong>
+            <p>আপনার ব্যালেন্স অনুযায়ী একটি প্রোডাক্ট নির্বাচন করুন এবং গ্রাব করুন।</p>
+          </div>
+        </div>
+        <div className="empty-product">
+          <span>
+            <Icon name={claimed ? "check" : "work"} size={47} />
+          </span>
+          <strong>
+            {claimed
+              ? "প্রোডাক্ট সফলভাবে গ্রাব হয়েছে"
+              : "এখনো কোনো প্রোডাক্ট গ্রাব করা হয়নি"}
+          </strong>
+          <p>
+            {claimed ? "কমিশন আপনার ব্যালেন্সে যুক্ত হয়েছে" : "গ্রাব বাটনে ক্লিক করুন"}
+          </p>
+        </div>
+        <button
+          className={claimed ? "grab-button claimed" : "grab-button"}
+          onClick={onGrab}
+        >
+          <span>
+            {claimed ? (
+              <Icon name="check" size={23} />
+            ) : (
+              <Icon name="cursor" size={23} />
+            )}
+          </span>{" "}
+          {claimed ? "Grabbed" : "Grab Now"}
+        </button>
+        <p className="grab-note">▣ আপনার নির্ধারিত পরিমাণ অনুযায়ী গ্রাব করতে পারবেন।</p>
+      </section>
+
+      <section className="work-details">
+        <h2>
+          <Icon name="target" size={26} /> কাজের বিবরণ
+        </h2>
+        <div>
+          {[
+            ["work", "মোট কাজ", "৩"],
+            ["check", "সম্পন্ন", claimed ? "২" : "১"],
+            ["clock", "বাকি", claimed ? "১" : "২"],
+          ].map(([icon, title, value]) => (
+            <article key={title}>
+              <span>
+                <Icon name={icon} size={22} />
+              </span>
+              <small>{title}</small>
+              <b>{value}</b>
+            </article>
+          ))}
+        </div>
+      </section>
+      <p className="work-slogan">—　◆　ছোট ছোট কাজ　→　বড় আয়　◆　—</p>
+    </main>
+  )
+}
+
+function PlaceholderPage({ page }: { page: Page }) {
+  const current = navItems.find((item) => item.id === page)!
+  return (
+    <main className="placeholder page-content">
+      <div>
+        <span>
+          <Icon name={current.icon} size={54} />
+        </span>
+        <h1>{current.label}</h1>
+        <p>এই বিভাগটি শীঘ্রই উন্মুক্ত হবে।</p>
+      </div>
+    </main>
+  )
+}
+
+export default function App() {
+  const [page, setPage] = useState<Page>("home")
+  const [toast, setToast] = useState("")
+  const [claimed, setClaimed] = useState(false)
+
+  const showToast = (message: string) => {
+    setToast(message)
+    window.setTimeout(() => setToast(""), 2200)
+  }
+
+  const changePage = (next: Page) => {
+    setPage(next)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  return (
+    <div className={`app ${page === "work" ? "blue-header" : ""}`}>
+      <AppHeader onNotice={() => showToast("কোনো নতুন নোটিফিকেশন নেই")} />
+      {page === "home" && <HomePage action={showToast} />}
+      {page === "work" && (
+        <WorkPage
+          claimed={claimed}
+          onGrab={() => {
+            if (!claimed) {
+              setClaimed(true)
+              showToast("অভিনন্দন! প্রোডাক্ট গ্রাব সফল হয়েছে")
+            } else {
+              showToast("আজকের এই গ্রাবটি ইতিমধ্যে সম্পন্ন হয়েছে")
+            }
+          }}
+        />
+      )}
+      {!["home", "work"].includes(page) && <PlaceholderPage page={page} />}
+      {toast && (
+        <div className="toast" role="status">
+          {toast}
+        </div>
+      )}
+      <BottomNav page={page} onChange={changePage} />
+    </div>
+  )
+}
+</file>
+
+<file path="index.html">
+<!doctype html>
+<html lang="<!-- figma:lang -->">
+  <head>
+    <!-- figma:head-start -->
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title><!-- figma:title --></title>
+    <!-- figma:head-end -->
+  </head>
+  <body>
+    <!-- figma:body-start -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <!-- figma:body-end -->
+  </body>
+</html>
+</file>
+
+<file path="src/index.css">
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+:root {
+  font-family: 'Noto Sans Bengali', system-ui, sans-serif;
+  color: #05295f;
+  background: #eefaff;
+  font-synthesis: none;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  background: #eefaff;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100dvh;
+  background: linear-gradient(180deg, #f6fcff 0%, #eafaff 65%, #f5fcff 100%);
+}
+
+button {
+  cursor: pointer;
+}
+
+strong,
+b {
+  font-weight: 500;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.app {
+  width: 100%;
+  min-height: 100dvh;
+  padding-bottom: 77px;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 82% 5%, rgba(122, 213, 255, .16), transparent 28%),
+    linear-gradient(180deg, #f8fdff, #eafaff 74%, #f5fcff);
+}
+
+.app-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 104px;
+  padding: 13px 20px 12px;
+}
+
+.blue-header .app-header {
+  color: white;
+  background: linear-gradient(120deg, #0875ec 0%, #009ff5 75%, #048aeb 100%);
+}
+
+.blue-header .app-header::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+  opacity: .18;
+  background: linear-gradient(145deg, transparent 45%, #fff 46%, transparent 47%);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 64px;
+  height: 68px;
+  border: 1px solid rgba(255,255,255,.6);
+  border-radius: 14px;
+  color: #d9f2ff;
+  background: linear-gradient(#72d9fb, #088ee9);
+  box-shadow: inset 0 1px 8px rgba(255,255,255,.45);
+}
+
+.identity {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  line-height: 1.12;
+}
+
+.identity strong {
+  font-size: clamp(20px, 5.7vw, 24px);
+  font-weight: 700;
+}
+
+.identity > span {
+  overflow: hidden;
+  max-width: 100%;
+  font-size: clamp(12px, 3.6vw, 15px);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crown, .diamond {
+  color: #048fe7;
+  font-family: serif;
+}
+
+.blue-header .crown,
+.blue-header .diamond {
+  color: white;
+}
+
+.diamond {
+  margin-right: 4px;
+  font-size: 18px;
+  font-style: normal;
+}
+
+.notice-button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  margin-left: auto;
+  flex: 0 0 auto;
+  padding: 10px 4px;
+  color: #048ce1;
+  background: transparent;
+  border: 0;
+}
+
+.blue-header .notice-button {
+  color: white;
+  filter: drop-shadow(0 2px 2px rgba(0, 61, 135, .35));
+}
+
+.notice-button b {
+  position: absolute;
+  top: 6px;
+  right: 1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff2b63;
+}
+
+.page-content {
+  padding: 0 14px 18px;
+}
+
+.balance-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  min-height: 115px;
+  padding: 17px 22px;
+  overflow: hidden;
+  border-radius: 15px;
+  color: white;
+  background: linear-gradient(115deg, #0874dc 0%, #00a6ef 70%, #06c7e9);
+}
+
+.balance-card::after {
+  position: absolute;
+  right: -20%;
+  width: 72%;
+  height: 130%;
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: 50%;
+  content: '';
+  transform: rotate(15deg);
+}
+
+.balance-card .wallet-mark {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  color: #138bdc;
+  background: white;
+}
+
+.balance-card > div:last-child {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.balance-card span {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.balance-card strong {
+  font-size: clamp(29px, 9vw, 38px);
+  font-weight: 500;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 13px;
+  padding: 8px;
+  border: 1px solid #d7edf5;
+  border-radius: 14px;
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 2px 10px rgba(0, 115, 170, .1);
+}
+
+.stat-cell {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 85px;
+  padding: 11px 6px;
+  border-right: 1px solid #d4e9ef;
+}
+
+.stat-cell:nth-child(3n) { border-right: 0; }
+.stat-cell:nth-child(-n+3) { border-bottom: 1px solid #d4e9ef; }
+
+.small-icon,
+.work-stats > div > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #087fe0;
+  background: #e4f6fc;
+}
+
+.stat-cell > div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow-wrap: anywhere;
+}
+
+.stat-cell span:not(.small-icon) {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.stat-cell strong {
+  color: #050505;
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 11px;
+}
+
+.quick-grid button {
+  display: flex;
+  min-height: 115px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 0;
+  border-radius: 12px;
+  color: #072d65;
+  background: transparent;
+  box-shadow: none;
+}
+
+.quick-grid button > span {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  color: #087ee5;
+  background: #e5f7ff;
+}
+
+.quick-grid b {
+  max-width: 100%;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.menu-list {
+  display: grid;
+  gap: 5px;
+  margin-top: 11px;
+}
+
+.menu-list button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 6px 17px;
+  border: 0;
+  border-radius: 11px;
+  color: #082e66;
+  background: transparent;
+  box-shadow: none;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.menu-list b {
+  color: #008ad9;
+  font-family: Arial, sans-serif;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.chat-button {
+  position: fixed;
+  z-index: 10;
+  right: 16px;
+  bottom: 88px;
+  display: grid;
+  place-items: center;
+  width: 57px;
+  height: 57px;
+  border: 0;
+  border-radius: 50%;
+  color: #087ee2;
+  background: white;
+  box-shadow: 0 4px 16px rgba(0, 102, 185, .35);
+}
+
+.chat-button span {
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 32px;
+  border-radius: 50%;
+  color: white;
+  background: #0b8eea;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.chat-button b {
+  position: absolute;
+  top: -3px;
+  right: -1px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: white;
+  background: #ee1743;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+}
+
+.product-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 112px;
+  padding: 17px 18px;
+  overflow: hidden;
+  border-radius: 13px;
+  color: white;
+  background: linear-gradient(120deg, #0955c5, #018eea 65%, #00b9f1);
+}
+
+.cube-round {
+  display: grid;
+  place-items: center;
+  flex: 0 0 56px;
+  height: 56px;
+  margin-right: 13px;
+  border-radius: 50%;
+  color: #067ce0;
+  background: white;
+}
+
+.product-banner > div:nth-child(2) {
+  z-index: 2;
+  min-width: 0;
+  padding-right: 118px;
+}
+
+.product-banner strong {
+  display: block;
+  font-family: Arial, sans-serif;
+  font-size: clamp(16px, 4.8vw, 21px);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.product-banner p {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.product-banner em {
+  position: absolute;
+  right: 13px;
+  bottom: 10px;
+  font-family: Georgia, serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  transform: rotate(-8deg);
+}
+
+.gift-art {
+  position: absolute;
+  right: 68px;
+  bottom: 12px;
+  width: 76px;
+  height: 73px;
+  transform: rotate(2deg);
+}
+
+.gift-body, .gift-lid {
+  position: absolute;
+  border: 1px solid rgba(255,255,255,.7);
+  background: linear-gradient(135deg, #e5fbff, #75d8fb 55%, #f4fdff);
+  box-shadow: 0 5px 9px rgba(0,45,120,.3);
+}
+
+.gift-body { inset: 24px 8px 0; }
+.gift-lid { top: 17px; left: 3px; width: 70px; height: 17px; }
+.gift-ribbon { position: absolute; z-index: 2; top: 17px; left: 31px; width: 14px; height: 56px; background: #078ee4; }
+.gift-bow { position: absolute; z-index: 3; top: 5px; left: 25px; }
+.gift-bow i { position: absolute; width: 25px; height: 13px; border-radius: 80% 20%; background: #dff8ff; transform: rotate(27deg); transform-origin: right; }
+.gift-bow i:last-child { left: 15px; transform: scaleX(-1) rotate(27deg); }
+
+.work-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 12px;
+  padding: 9px;
+  border: 1px solid #d9ecf4;
+  border-radius: 13px;
+  background: rgba(255,255,255,.88);
+  box-shadow: 0 2px 8px rgba(1,102,159,.08);
+}
+
+.work-stats > div {
+  display: grid;
+  grid-template: auto auto / 40px 1fr;
+  align-items: center;
+  min-width: 0;
+  padding: 6px 4px;
+  border: 1px solid #dceef5;
+  border-radius: 9px;
+}
+
+.work-stats > div > span {
+  grid-row: span 2;
+  margin-right: 5px;
+  color: white;
+  background: #0798ef;
+}
+
+.work-stats small {
+  overflow: hidden;
+  max-width: 100%;
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.work-stats b {
+  color: #071f4e;
+  font-size: clamp(12px, 3.3vw, 15px);
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.grab-card {
+  margin-top: 12px;
+  padding: 16px 15px 17px;
+  border: 1px solid #d6ebf3;
+  border-radius: 13px;
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 2px 8px rgba(1,102,159,.07);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title > span {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 43px;
+  border-radius: 20px 7px 7px 20px;
+  color: white;
+  background: linear-gradient(120deg, #0976df, #05b8ef);
+}
+
+.section-title > div {
+  min-width: 0;
+}
+
+.section-title strong {
+  display: block;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.section-title p {
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.empty-product {
+  display: flex;
+  min-height: 166px;
+  margin-top: 14px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #94d8e8;
+  border-radius: 10px;
+  background: rgba(239,250,255,.72);
+  text-align: center;
+}
+
+.empty-product > span {
+  display: grid;
+  place-items: center;
+  width: 77px;
+  height: 77px;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  color: white;
+  background: linear-gradient(145deg, #e8f9ff, #8cc9ec);
+}
+
+.empty-product strong {
+  max-width: 92%;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.empty-product p {
+  max-width: 92%;
+  font-size: 13px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.grab-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 48%;
+  min-width: 215px;
+  height: 52px;
+  margin: 16px auto 8px;
+  border: 0;
+  border-radius: 999px;
+  color: white;
+  background: linear-gradient(#08a9f5, #076de0);
+  box-shadow: 0 5px 12px rgba(0,118,224,.22);
+  font-family: Arial, sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.grab-button span { font-size: 23px; }
+.grab-button.claimed { background: linear-gradient(#21c891, #04a26e); }
+.grab-note { font-size: 10px; text-align: center; }
+
+.work-details {
+  margin-top: 12px;
+  padding: 13px 15px 16px;
+  border: 1px solid #d6ebf3;
+  border-radius: 13px;
+  background: rgba(255,255,255,.9);
+}
+
+.work-details h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  color: #075692;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.work-details h2 svg { color: #038ce6; }
+
+.work-details > div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 9px 5px;
+  border: 1px solid #d9ecf4;
+  border-radius: 9px;
+  background: #f7fcff;
+}
+
+.work-details article {
+  display: grid;
+  grid-template: auto auto / 40px minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+  padding: 0 14px;
+  border-right: 1px solid #d6eaf1;
+}
+
+.work-details article:last-child { border: 0; }
+.work-details article span {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  color: white;
+  background: #0b86e7;
+}
+
+.work-details small {
+  min-width: 0;
+  font-size: 10px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.work-details b {
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.work-slogan {
+  margin: 23px 0 3px;
+  color: #0870bc;
+  font-size: clamp(11px, 3.4vw, 14px);
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.bottom-nav {
+  position: fixed;
+  z-index: 20;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  height: 77px;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid #e3eef3;
+  background: rgba(255,255,255,.97);
+  box-shadow: 0 -3px 10px rgba(1, 74, 115, .05);
+  backdrop-filter: blur(10px);
+}
+
+.bottom-nav button {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 0;
+  border-right: 1px solid #e1edf2;
+  color: #416f9e;
+  background: transparent;
+}
+
+.bottom-nav button:last-child { border: 0; }
+.bottom-nav button.active { color: #008ee4; }
+.bottom-nav span {
+  display: block;
+  width: 100%;
+  padding: 0 2px;
+  font-size: clamp(8px, 2.6vw, 11px);
+  font-weight: 500;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.toast {
+  position: fixed;
+  z-index: 50;
+  bottom: 91px;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 40px);
+  padding: 10px 16px;
+  border-radius: 999px;
+  color: white;
+  background: rgba(3, 38, 80, .9);
+  box-shadow: 0 4px 18px rgba(0,0,0,.2);
+  font-size: 13px;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: toast-in .2s ease-out;
+}
+
+.placeholder {
+  display: grid;
+  min-height: calc(100dvh - 181px);
+  place-items: center;
+}
+
+.placeholder > div {
+  text-align: center;
+}
+
+.placeholder span {
+  display: grid;
+  place-items: center;
+  width: 104px;
+  height: 104px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  color: white;
+  background: linear-gradient(145deg, #08b9ef, #0968dc);
+}
+
+.placeholder h1 { font-size: 27px; }
+.placeholder p { margin-top: 4px; color: #557493; font-size: 15px; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+}
+
+@media (max-width: 600px) {
+  .app-header { padding-inline: 14px; }
+  .avatar {
+    flex-basis: 56px;
+    height: 60px;
+  }
+  .identity strong { font-size: clamp(19px, 5.5vw, 22px); }
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 6px;
+  }
+  .stat-cell {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 7px;
+    min-height: 78px;
+    padding: 9px 7px;
+    border-right: 1px solid #d4e9ef;
+    border-bottom: 1px solid #d4e9ef;
+  }
+  .stat-cell:nth-child(2n) { border-right: 0; }
+  .stat-cell:nth-child(3) { border-right: 1px solid #d4e9ef; }
+  .stat-cell:nth-child(n+5) { border-bottom: 0; }
+  .small-icon { flex-basis: 34px; width: 34px; height: 34px; }
+  .stat-cell span:not(.small-icon) { font-size: 11px; }
+  .stat-cell strong { font-size: clamp(14px, 4.4vw, 17px); }
+  .quick-grid b { font-size: 13px; }
+  .product-banner {
+    min-height: 120px;
+    padding-inline: 14px;
+  }
+  .product-banner > div:nth-child(2) { padding-right: 82px; }
+  .product-banner strong { font-size: clamp(15px, 4.5vw, 18px); }
+  .product-banner p { font-size: 10px; }
+  .cube-round {
+    flex-basis: 46px;
+    height: 46px;
+    margin-right: 9px;
+  }
+  .gift-art {
+    right: 40px;
+    transform: scale(.67);
+    transform-origin: bottom right;
+  }
+  .product-banner em {
+    right: 7px;
+    font-size: 10px;
+  }
+  .work-stats { gap: 3px; padding: 6px; }
+  .work-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .work-stats > div {
+    grid-template: auto auto / 40px minmax(0, 1fr);
+    min-height: 62px;
+    justify-items: stretch;
+    text-align: left;
+  }
+  .work-stats > div > span { grid-row: auto; margin: 0; width: 33px; height: 33px; }
+  .work-stats > div > span { grid-row: span 2; }
+  .work-stats small {
+    font-size: 10px;
+    white-space: normal;
+  }
+  .work-details article {
+    grid-template: 34px auto auto / 1fr;
+    justify-items: center;
+    padding-inline: 4px;
+    text-align: center;
+  }
+  .work-details article span { grid-row: auto; }
+  .work-details small { margin-top: 4px; }
+  .bottom-nav span { font-size: clamp(8px, 2.5vw, 10px); }
+}
+
+@media (min-width: 391px) and (max-width: 430px) {
+  .app-header {
+    min-height: 96px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .page-content {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .balance-card {
+    min-height: 104px;
+    padding: 15px 19px;
+  }
+
+  .stats-grid {
+    gap: 0;
+  }
+
+  .stat-cell {
+    min-height: 74px;
+  }
+
+  .quick-grid {
+    gap: 7px;
+  }
+
+  .quick-grid button {
+    min-width: 0;
+    min-height: 105px;
+    padding: 8px 3px;
+  }
+
+  .quick-grid button > span {
+    width: 54px;
+    height: 54px;
+  }
+
+  .menu-list button {
+    min-height: 45px;
+  }
+
+  .product-banner {
+    min-height: 112px;
+  }
+
+  .work-stats > div {
+    min-height: 58px;
+  }
+
+  .empty-product {
+    min-height: 154px;
+  }
+
+  .bottom-nav {
+    height: 72px;
+  }
+
+  .app {
+    padding-bottom: 72px;
+  }
+
+  .chat-button {
+    bottom: 82px;
+  }
+}
+
+@media (max-width: 350px) {
+  .page-content { padding-inline: 9px; }
+  .app-header {
+    gap: 8px;
+    padding-inline: 10px;
+  }
+  .avatar {
+    flex-basis: 48px;
+    height: 53px;
+  }
+  .notice-button { padding-inline: 0; }
+  .quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .quick-grid button { min-height: 98px; }
+  .product-banner > div:nth-child(2) { padding-right: 0; }
+  .gift-art, .product-banner em { display: none; }
+  .grab-button {
+    width: 82%;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 700px) {
+  .page-content {
+    padding-right: 4vw;
+    padding-left: 4vw;
+  }
+
+  .app-header {
+    padding-right: 5vw;
+    padding-left: 5vw;
+  }
+}
+</file>
+
+</files>

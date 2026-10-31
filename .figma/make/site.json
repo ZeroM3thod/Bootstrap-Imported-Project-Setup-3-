@@ -1,0 +1,10 @@
+{
+  "description": "A project setup workflow for teams importing Figma projects, validating bootstrap readiness, and preparing deployment and preview configurations.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
