@@ -879,6 +879,53 @@ button:active {
   font-weight: 600;
 }
 
+.package-recommendation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid #bfe4d4;
+  border-radius: 13px;
+  background: linear-gradient(120deg, #effbf6, #f8fdff);
+}
+
+.package-recommendation > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  height: 36px;
+  border-radius: 11px;
+  color: white;
+  background: linear-gradient(145deg, #12ad75, #078f61);
+}
+
+.package-recommendation > div {
+  min-width: 0;
+}
+
+.package-recommendation small,
+.package-recommendation strong {
+  display: block;
+}
+
+.package-recommendation small {
+  color: #4d7666;
+  font-size: 9px;
+}
+
+.package-recommendation strong {
+  color: #08704c;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.package-recommendation p {
+  color: #5c746c;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
 .package-list {
   display: grid;
   gap: 10px;
@@ -904,6 +951,15 @@ button:active {
   border-radius: 50%;
   content: '';
   background: rgba(7, 137, 221, .05);
+}
+
+.suggested-package {
+  border-color: #80d3b2;
+  box-shadow: 0 0 0 2px rgba(13, 166, 109, .08);
+}
+
+.suggested-package .package-number {
+  background: linear-gradient(145deg, #12ad75, #078f61);
 }
 
 .package-number {
@@ -1331,6 +1387,88 @@ button:active {
   color: #102a43;
   font-size: 12px;
   font-weight: 700;
+}
+
+.investment-amount-field {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #cfe5f5;
+  border-radius: 13px;
+  background: #f6fbff;
+}
+
+.investment-amount-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.investment-amount-heading small,
+.investment-amount-heading strong {
+  display: block;
+}
+
+.investment-amount-heading small {
+  color: #657b8d;
+  font-size: 9px;
+}
+
+.investment-amount-heading strong {
+  color: #17405f;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.investment-amount-heading button {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border: 1px solid #b8ddf4;
+  border-radius: 999px;
+  color: #0870c8;
+  background: white;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.investment-input-wrap {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  margin-top: 8px;
+  overflow: hidden;
+  border: 1px solid #b9dcef;
+  border-radius: 10px;
+  background: white;
+}
+
+.investment-input-wrap > span {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  color: white;
+  background: #0879d9;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.investment-input-wrap input {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 0;
+  outline: 0;
+  color: #102a43;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.investment-amount-field > p {
+  margin-top: 6px;
+  color: #6b8092;
+  font-size: 9px;
+  line-height: 1.4;
 }
 
 .purchase-balance {

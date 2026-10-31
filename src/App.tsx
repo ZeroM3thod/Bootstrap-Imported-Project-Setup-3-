@@ -321,10 +321,25 @@ function WorkPage({
   investment: ActiveInvestment | null
   onExplore: () => void
 }) {
-  const dailyProfit = investment
-    ? (investment.amount * investment.package.dailyRate) / 100
-    : 0
   const projectedDays = ["প্রথম", "দ্বিতীয়", "তৃতীয়", "চতুর্থ", "পঞ্চম"]
+  const dailyRate = investment ? investment.package.dailyRate / 100 : 0
+  const dailyRows = investment
+    ? projectedDays.map((day, index) => {
+        const openingBalance =
+          investment.amount * Math.pow(1 + dailyRate, index)
+        const profit = openingBalance * dailyRate
+        return {
+          day,
+          openingBalance,
+          profit,
+          closingBalance: openingBalance + profit,
+        }
+      })
+    : []
+  const firstDayProfit = dailyRows[0]?.profit ?? 0
+  const thirtyDayProfit = investment
+    ? investment.amount * Math.pow(1 + dailyRate, 30) - investment.amount
+    : 0
 
   return (
     <main className="earn-page work-investment-page page-content">
@@ -347,7 +362,7 @@ function WorkPage({
           </div>
           <div>
             <small>প্রতিদিনের প্রাপ্তি</small>
-            <strong>{investment ? money(dailyProfit) : money(0)}</strong>
+            <strong>{investment ? money(firstDayProfit) : money(0)}</strong>
           </div>
         </div>
       </section>
@@ -389,7 +404,7 @@ function WorkPage({
                     <small>প্রতিদিন সম্ভাব্য লভ্যাংশ</small>
                     <strong>
                       {bengaliNumber(investment.package.dailyRate)}% ·{" "}
-                      {money(dailyProfit)}
+                      {money(firstDayProfit)}
                     </strong>
                   </div>
                 </div>
@@ -405,8 +420,8 @@ function WorkPage({
                   "প্রতিদিনের হার",
                   `${bengaliNumber(investment.package.dailyRate)}%`,
                 ],
-                ["coins", "প্রতিদিনের প্রাপ্তি", money(dailyProfit)],
-                ["calendar", "ত্রিশ দিনের সম্ভাবনা", money(dailyProfit * 30)],
+                ["coins", "প্রথম দিনের প্রাপ্তি", money(firstDayProfit)],
+                ["calendar", "ত্রিশ দিনের মোট লাভ", money(thirtyDayProfit)],
               ].map(([icon, label, value]) => (
                 <article key={label}>
                   <span>
@@ -448,14 +463,17 @@ function WorkPage({
             <b>দৈনিক</b>
           </div>
           <div className="daily-profit-list">
-            {projectedDays.map((day, index) => (
-              <article key={day}>
+            {dailyRows.map((row, index) => (
+              <article key={row.day}>
                 <span>{bengaliNumber(index + 1)}</span>
                 <div>
-                  <strong>{day} দিনের সম্ভাব্য প্রাপ্তি</strong>
-                  <small>পুঁজির উপর নির্ধারিত দৈনিক লভ্যাংশ</small>
+                  <strong>{row.day} দিনের সম্ভাব্য প্রাপ্তি</strong>
+                  <small>
+                    দিনের শুরু {money(row.openingBalance)} · দিনশেষে{" "}
+                    {money(row.closingBalance)}
+                  </small>
                 </div>
-                <b>{money(dailyProfit)}</b>
+                <b>+ {money(row.profit)}</b>
               </article>
             ))}
           </div>
@@ -469,8 +487,8 @@ function WorkPage({
         <div>
           <h2>মনে রাখার কথা</h2>
           <p>
-            প্রতিদিনের অঙ্কটি সম্ভাব্য হিসাবের প্রতিচ্ছবি; নীতিমালা ও সময়ের
-            প্রবাহে চূড়ান্ত প্রাপ্তিতে পরিবর্তন আসতে পারে।
+            প্রতিদিনের লাভ আগের দিনের পুঁজি ও প্রাপ্তি মিলিয়ে নতুন অঙ্কের ওপর
+            হিসাব হয়; তাই সঞ্চয়ের নদী দিনে দিনে আরও প্রশস্ত হয়ে বয়ে চলে।
           </p>
         </div>
       </section>
@@ -484,6 +502,7 @@ const vipPackages = [
     investment: "৳ ১,০০০ – ৳ ৪,৯৯৯",
     profit: "১% – ১.২%",
     minimum: 1000,
+    maximum: 4999,
     dailyRate: 1,
   },
   {
@@ -491,6 +510,7 @@ const vipPackages = [
     investment: "৳ ৫,০০০ – ৳ ৯,৯৯৯",
     profit: "১.২% – ১.৪%",
     minimum: 5000,
+    maximum: 9999,
     dailyRate: 1.2,
   },
   {
@@ -498,6 +518,7 @@ const vipPackages = [
     investment: "৳ ১০,০০০ – ৳ ১৯,৯৯৯",
     profit: "১.৪% – ১.৬%",
     minimum: 10000,
+    maximum: 19999,
     dailyRate: 1.4,
   },
   {
@@ -505,6 +526,7 @@ const vipPackages = [
     investment: "৳ ২০,০০০ – ৳ ৩৪,৯৯৯",
     profit: "১.৬% – ১.৮%",
     minimum: 20000,
+    maximum: 34999,
     dailyRate: 1.6,
   },
   {
@@ -512,6 +534,7 @@ const vipPackages = [
     investment: "৳ ৩৫,০০০ – ৳ ৪৯,৯৯৯",
     profit: "১.৮% – ২%",
     minimum: 35000,
+    maximum: 49999,
     dailyRate: 1.8,
   },
 ]
@@ -531,23 +554,45 @@ function EarnPage({
 }: {
   action: (message: string) => void
   balance: number
-  onPurchase: (selectedPackage: VipPackage) => void
+  onPurchase: (selectedPackage: VipPackage, amount: number) => void
 }) {
   const [selectedPackage, setSelectedPackage] = useState<
     (typeof vipPackages)[number] | null
   >(null)
-  const hasEnoughBalance = selectedPackage
-    ? balance >= selectedPackage.minimum
-    : false
+  const [investmentAmount, setInvestmentAmount] = useState(0)
+  const suggestedPackage = [...vipPackages]
+    .reverse()
+    .find((item) => balance >= item.minimum)
+  const amountError = selectedPackage
+    ? balance < selectedPackage.minimum
+      ? "এই প্যাকেজে পা রাখার মতো পর্যাপ্ত সঞ্চয় এখনও জমেনি।"
+      : investmentAmount < selectedPackage.minimum
+        ? `কমপক্ষে ${money(selectedPackage.minimum)} বিনিয়োগ করতে হবে।`
+        : investmentAmount > selectedPackage.maximum
+          ? `এই প্যাকেজে সর্বোচ্চ ${money(selectedPackage.maximum)} বিনিয়োগ করা যাবে।`
+          : investmentAmount > balance
+            ? "নির্বাচিত অঙ্কটি আপনার বর্তমান সঞ্চয়ের চেয়ে বেশি।"
+            : ""
+    : ""
+
+  const openPackage = (item: VipPackage) => {
+    setSelectedPackage(item)
+    setInvestmentAmount(item.minimum)
+  }
+
+  const investAvailableBalance = () => {
+    if (!selectedPackage) return
+    setInvestmentAmount(Math.min(balance, selectedPackage.maximum))
+  }
 
   const confirmPurchase = () => {
     if (!selectedPackage) return
-    if (!hasEnoughBalance) {
-      action("প্যাকেজ কেনার জন্য আপনার ব্যালেন্স পর্যাপ্ত নয়")
+    if (amountError) {
+      action(amountError)
       return
     }
 
-    onPurchase(selectedPackage)
+    onPurchase(selectedPackage, investmentAmount)
     setSelectedPackage(null)
   }
 
@@ -592,14 +637,41 @@ function EarnPage({
             <b>৫টি স্তর</b>
           </div>
 
+          {suggestedPackage && (
+            <div className="package-recommendation">
+              <span>
+                <Icon name="target" size={20} />
+              </span>
+              <div>
+                <small>আপনার সঞ্চয়ের সঙ্গে মানানসই প্রস্তাব</small>
+                <strong>{suggestedPackage.name}</strong>
+                <p>
+                  বর্তমান {money(balance)} সঞ্চয় এই প্যাকেজের সীমায় সুন্দরভাবে
+                  মানিয়ে যায়।
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="package-list" aria-label="ভিআইপি প্যাকেজের তালিকা">
             {vipPackages.map((item, index) => (
-              <article className="vip-package" key={item.name}>
+              <article
+                className={
+                  suggestedPackage?.name === item.name
+                    ? "vip-package suggested-package"
+                    : "vip-package"
+                }
+                key={item.name}
+              >
                 <div className="package-number">{bengaliNumber(index + 1)}</div>
                 <div className="package-main">
                   <div className="package-name">
                     <span>{item.name}</span>
-                    <small>বিনিয়োগ স্তর</small>
+                    <small>
+                      {suggestedPackage?.name === item.name
+                        ? "আপনার জন্য প্রস্তাবিত সোপান"
+                        : "বিনিয়োগ স্তর"}
+                    </small>
                   </div>
                   <div className="package-range">
                     <small>বিনিয়োগ সীমা</small>
@@ -614,7 +686,7 @@ function EarnPage({
                       <strong>{item.profit}</strong>
                     </div>
                   </div>
-                  <button onClick={() => setSelectedPackage(item)}>
+                  <button onClick={() => openPackage(item)}>
                     প্যাকেজ কিনুন
                   </button>
                 </div>
@@ -678,6 +750,34 @@ function EarnPage({
               </div>
             </div>
 
+            <div className="investment-amount-field">
+              <div className="investment-amount-heading">
+                <div>
+                  <small>আপনার বিনিয়োগের অঙ্ক</small>
+                  <strong>ইচ্ছেমতো অঙ্ক লিখুন</strong>
+                </div>
+                <button onClick={investAvailableBalance} type="button">
+                  যতটুকু সম্ভব সবটুকু
+                </button>
+              </div>
+              <div className="investment-input-wrap">
+                <span>৳</span>
+                <input
+                  aria-label="বিনিয়োগের অঙ্ক"
+                  inputMode="numeric"
+                  onChange={(event) =>
+                    setInvestmentAmount(parseBengaliNumber(event.target.value))
+                  }
+                  type="text"
+                  value={toBengaliDigits(investmentAmount)}
+                />
+              </div>
+              <p>
+                এই সোপানে {money(selectedPackage.minimum)} থেকে{" "}
+                {money(selectedPackage.maximum)} পর্যন্ত বিনিয়োগ করা যায়।
+              </p>
+            </div>
+
             <div className="purchase-balance">
               <div>
                 <span>
@@ -694,26 +794,22 @@ function EarnPage({
               </div>
             </div>
 
-            {!hasEnoughBalance && (
-              <p className="balance-warning">
-                এই প্যাকেজ কেনার জন্য আপনার বর্তমান ব্যালেন্স পর্যাপ্ত নয়।
-              </p>
-            )}
+            {amountError && <p className="balance-warning">{amountError}</p>}
 
             <div className="purchase-rules">
               <h3>প্যাকেজ কেনার নিয়ম</h3>
               <ol>
                 <li>
-                  ক্রয় নিশ্চিত করলে প্যাকেজের সর্বনিম্ন মূল্য আপনার ব্যালেন্স
-                  থেকে কাটা হবে।
+                  ক্রয় নিশ্চিত করলে আপনার লেখা বিনিয়োগের অঙ্কটি সঞ্চয় থেকে
+                  কাটা হবে।
                 </li>
                 <li>
                   পর্যাপ্ত ব্যালেন্স থাকলে নির্বাচিত প্যাকেজ সঙ্গে সঙ্গে সক্রিয়
                   হবে।
                 </li>
                 <li>
-                  দৈনিক সম্ভাব্য লাভ নির্বাচিত প্যাকেজের নির্ধারিত হারের মধ্যে
-                  হিসাব করা হবে।
+                  প্রতিদিনের লাভ আগের দিনের পুঁজি ও লাভের সম্মিলিত অঙ্কের ওপর
+                  নতুন করে হিসাব হবে।
                 </li>
                 <li>
                   নিশ্চিত করার আগে প্যাকেজের সীমা, লাভের হার এবং সব শর্ত যাচাই
@@ -858,6 +954,17 @@ const teamData: Record<keyof typeof teamRates, {
 
 const bengaliNumber = (value: number) =>
   value.toLocaleString("bn-BD", { maximumFractionDigits: 1 })
+
+const toBengaliDigits = (value: number) =>
+  String(value).replace(/\d/g, (digit) => "০১২৩৪৫৬৭৮৯"[Number(digit)])
+
+const parseBengaliNumber = (value: string) => {
+  const normalized = value
+    .replace(/[০-৯]/g, (digit) => String("০১২৩৪৫৬৭৮৯".indexOf(digit)))
+    .replace(/[^\d]/g, "")
+
+  return normalized ? Number(normalized) : 0
+}
 
 const money = (value: number) =>
   `৳ ${value.toLocaleString("bn-BD", {
@@ -1160,11 +1267,11 @@ export default function App() {
         <EarnPage
           action={showToast}
           balance={balance}
-          onPurchase={(selectedPackage) => {
-            setBalance((current) => current - selectedPackage.minimum)
+          onPurchase={(selectedPackage, amount) => {
+            setBalance((current) => current - amount)
             setInvestment({
               package: selectedPackage,
-              amount: selectedPackage.minimum,
+              amount,
               startedAt: new Date().toLocaleDateString("bn-BD", {
                 day: "numeric",
                 month: "long",
