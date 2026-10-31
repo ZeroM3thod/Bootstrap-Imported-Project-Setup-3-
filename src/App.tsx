@@ -233,7 +233,13 @@ const stats = [
   ["wallet", "মোট উত্তোলন", "৳ ২০০.০০"],
 ]
 
-function HomePage({ action }: { action: (message: string) => void }) {
+function HomePage({
+  action,
+  balance,
+}: {
+  action: (message: string) => void
+  balance: number
+}) {
   const menu = [
     "সাধারণ হিসাবপত্র",
     "জমার অর্ডার",
@@ -251,7 +257,7 @@ function HomePage({ action }: { action: (message: string) => void }) {
         </div>
         <div>
           <span>মোট সঞ্চয়</span>
-          <strong>৳ ১০২.০৩</strong>
+          <strong>{money(balance)}</strong>
         </div>
       </section>
 
@@ -308,128 +314,166 @@ function HomePage({ action }: { action: (message: string) => void }) {
   )
 }
 
-function GiftArtwork() {
-  return (
-    <div className="gift-art" aria-hidden="true">
-      <div className="gift-lid" />
-      <div className="gift-body" />
-      <div className="gift-ribbon" />
-      <div className="gift-bow">
-        <i />
-        <i />
-      </div>
-    </div>
-  )
-}
-
 function WorkPage({
-  claimed,
-  onGrab,
+  investment,
+  onExplore,
 }: {
-  claimed: boolean
-  onGrab: () => void
+  investment: ActiveInvestment | null
+  onExplore: () => void
 }) {
+  const dailyProfit = investment
+    ? (investment.amount * investment.package.dailyRate) / 100
+    : 0
+  const projectedDays = ["প্রথম", "দ্বিতীয়", "তৃতীয়", "চতুর্থ", "পঞ্চম"]
+
   return (
-    <main className="work-page page-content">
-      <section className="product-banner">
-        <span className="cube-round">
-          <Icon name="work" size={32} />
+    <main className="earn-page work-investment-page page-content">
+      <section className="earn-hero">
+        <div className="earn-hero-icon">
+          <Icon name="work" size={38} />
+        </div>
+        <div>
+          <span className="earn-kicker">সঞ্চয়ের বীজ থেকে প্রাপ্তির ফুল</span>
+          <h1>আপনার কর্মক্ষেত্র</h1>
+          <p>
+            যে পুঁজি আজ আশার মাটিতে রাখলেন, তার প্রতিদিনের লভ্যাংশ এখানে
+            ভোরের আলোর মতো ফুটে উঠবে।
+          </p>
+        </div>
+        <div className="earn-overview">
+          <div>
+            <small>সক্রিয় প্যাকেজ</small>
+            <strong>{investment ? investment.package.name : "এখনও নেই"}</strong>
+          </div>
+          <div>
+            <small>প্রতিদিনের প্রাপ্তি</small>
+            <strong>{investment ? money(dailyProfit) : money(0)}</strong>
+          </div>
+        </div>
+      </section>
+
+      <section className="package-section">
+        <div className="package-heading">
+          <div>
+            <span>
+              <Icon name="wallet" size={21} />
+            </span>
+            <div>
+              <h2>সক্রিয় প্যাকেজের খতিয়ান</h2>
+              <p>পুঁজি, হার ও প্রতিদিনের প্রাপ্তি—সবটুকু এক নজরে</p>
+            </div>
+          </div>
+          {investment && <b>চলমান</b>}
+        </div>
+
+        {investment ? (
+          <>
+            <article className="vip-package active-investment-card">
+              <div className="package-number">
+                <Icon name="check" size={21} />
+              </div>
+              <div className="package-main">
+                <div className="package-name">
+                  <span>{investment.package.name}</span>
+                  <small>প্রাপ্তির পথে সক্রিয় সোপান</small>
+                </div>
+                <div className="package-range">
+                  <small>যাত্রা শুরুর দিন</small>
+                  <strong>{investment.startedAt}</strong>
+                </div>
+                <div className="package-profit">
+                  <span>
+                    <Icon name="chart" size={17} />
+                  </span>
+                  <div>
+                    <small>প্রতিদিন সম্ভাব্য লভ্যাংশ</small>
+                    <strong>
+                      {bengaliNumber(investment.package.dailyRate)}% ·{" "}
+                      {money(dailyProfit)}
+                    </strong>
+                  </div>
+                </div>
+                <span className="investment-status">সক্রিয়</span>
+              </div>
+            </article>
+
+            <div className="investment-metrics">
+              {[
+                ["wallet", "রোপিত পুঁজি", money(investment.amount)],
+                [
+                  "chart",
+                  "প্রতিদিনের হার",
+                  `${bengaliNumber(investment.package.dailyRate)}%`,
+                ],
+                ["coins", "প্রতিদিনের প্রাপ্তি", money(dailyProfit)],
+                ["calendar", "ত্রিশ দিনের সম্ভাবনা", money(dailyProfit * 30)],
+              ].map(([icon, label, value]) => (
+                <article key={label}>
+                  <span>
+                    <Icon name={icon} size={20} />
+                  </span>
+                  <small>{label}</small>
+                  <strong>{value}</strong>
+                </article>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="investment-empty">
+            <span>
+              <Icon name="work" size={42} />
+            </span>
+            <h2>এখনও সঞ্চয়ের বীজ বোনা হয়নি</h2>
+            <p>
+              অর্জনের পথ থেকে একটি প্যাকেজ বেছে নিন; তারপর প্রতিদিনের প্রাপ্তির
+              কাব্য এই পাতায় লেখা হবে।
+            </p>
+            <button onClick={onExplore}>প্যাকেজ বেছে নিন</button>
+          </div>
+        )}
+      </section>
+
+      {investment && (
+        <section className="daily-ledger">
+          <div className="package-heading">
+            <div>
+              <span>
+                <Icon name="calendar" size={21} />
+              </span>
+              <div>
+                <h2>দিনে দিনে প্রাপ্তির পঙ্‌ক্তি</h2>
+                <p>প্রতিটি ভোরে একই হারে সম্ভাবনার নতুন অঙ্কুর</p>
+              </div>
+            </div>
+            <b>দৈনিক</b>
+          </div>
+          <div className="daily-profit-list">
+            {projectedDays.map((day, index) => (
+              <article key={day}>
+                <span>{bengaliNumber(index + 1)}</span>
+                <div>
+                  <strong>{day} দিনের সম্ভাব্য প্রাপ্তি</strong>
+                  <small>পুঁজির উপর নির্ধারিত দৈনিক লভ্যাংশ</small>
+                </div>
+                <b>{money(dailyProfit)}</b>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="earn-note">
+        <span>
+          <Icon name="check" size={20} />
         </span>
         <div>
-          <strong>Product Grabbing System</strong>
+          <h2>মনে রাখার কথা</h2>
           <p>
-            আপনার ব্যালেন্স অনুযায়ী প্রোডাক্ট গ্রাব করুন
-            <br />
-            এবং প্রতি গ্রাবের জন্য কমিশন পান।
+            প্রতিদিনের অঙ্কটি সম্ভাব্য হিসাবের প্রতিচ্ছবি; নীতিমালা ও সময়ের
+            প্রবাহে চূড়ান্ত প্রাপ্তিতে পরিবর্তন আসতে পারে।
           </p>
         </div>
-        <GiftArtwork />
-        <em>
-          Grab
-          <br />
-          Earn
-          <br />
-          Grow
-        </em>
       </section>
-
-      <section className="work-stats">
-        {[
-          ["wallet", "আমার ব্যালেন্স", "৳ ৫০২.০৩"],
-          ["coins", "প্রতি গ্রাব কমিশন", "৳ ১২৫.০০"],
-          ["users", "মোট গ্রাব সংখ্যা", claimed ? "৪" : "৩"],
-          ["calendar", "আজকের বাকি গ্রাব", claimed ? "১" : "২"],
-        ].map(([icon, title, value]) => (
-          <div key={title}>
-            <span>
-              <Icon name={icon} size={21} />
-            </span>
-            <small>{title}</small>
-            <b>{value}</b>
-          </div>
-        ))}
-      </section>
-
-      <section className="grab-card">
-        <div className="section-title">
-          <span>
-            <Icon name="work" size={25} />
-          </span>
-          <div>
-            <strong>প্রোডাক্ট গ্রাবিং</strong>
-            <p>আপনার ব্যালেন্স অনুযায়ী একটি প্রোডাক্ট নির্বাচন করুন এবং গ্রাব করুন।</p>
-          </div>
-        </div>
-        <div className="empty-product">
-          <span>
-            <Icon name={claimed ? "check" : "work"} size={47} />
-          </span>
-          <strong>
-            {claimed
-              ? "প্রোডাক্ট সফলভাবে গ্রাব হয়েছে"
-              : "এখনো কোনো প্রোডাক্ট গ্রাব করা হয়নি"}
-          </strong>
-          <p>
-            {claimed ? "কমিশন আপনার ব্যালেন্সে যুক্ত হয়েছে" : "গ্রাব বাটনে ক্লিক করুন"}
-          </p>
-        </div>
-        <button
-          className={claimed ? "grab-button claimed" : "grab-button"}
-          onClick={onGrab}
-        >
-          <span>
-            {claimed ? (
-              <Icon name="check" size={23} />
-            ) : (
-              <Icon name="cursor" size={23} />
-            )}
-          </span>{" "}
-          {claimed ? "Grabbed" : "Grab Now"}
-        </button>
-        <p className="grab-note">▣ আপনার নির্ধারিত পরিমাণ অনুযায়ী গ্রাব করতে পারবেন।</p>
-      </section>
-
-      <section className="work-details">
-        <h2>
-          <Icon name="target" size={26} /> কাজের বিবরণ
-        </h2>
-        <div>
-          {[
-            ["work", "মোট কাজ", "৩"],
-            ["check", "সম্পন্ন", claimed ? "২" : "১"],
-            ["clock", "বাকি", claimed ? "১" : "২"],
-          ].map(([icon, title, value]) => (
-            <article key={title}>
-              <span>
-                <Icon name={icon} size={22} />
-              </span>
-              <small>{title}</small>
-              <b>{value}</b>
-            </article>
-          ))}
-        </div>
-      </section>
-      <p className="work-slogan">—　◆　ছোট ছোট কাজ　→　বড় আয়　◆　—</p>
     </main>
   )
 }
@@ -440,40 +484,60 @@ const vipPackages = [
     investment: "৳ ১,০০০ – ৳ ৪,৯৯৯",
     profit: "১% – ১.২%",
     minimum: 1000,
+    dailyRate: 1,
   },
   {
     name: "ভিআইপি ২",
     investment: "৳ ৫,০০০ – ৳ ৯,৯৯৯",
     profit: "১.২% – ১.৪%",
     minimum: 5000,
+    dailyRate: 1.2,
   },
   {
     name: "ভিআইপি ৩",
     investment: "৳ ১০,০০০ – ৳ ১৯,৯৯৯",
     profit: "১.৪% – ১.৬%",
     minimum: 10000,
+    dailyRate: 1.4,
   },
   {
     name: "ভিআইপি ৪",
     investment: "৳ ২০,০০০ – ৳ ৩৪,৯৯৯",
     profit: "১.৬% – ১.৮%",
     minimum: 20000,
+    dailyRate: 1.6,
   },
   {
     name: "ভিআইপি ৫",
     investment: "৳ ৩৫,০০০ – ৳ ৪৯,৯৯৯",
     profit: "১.৮% – ২%",
     minimum: 35000,
+    dailyRate: 1.8,
   },
 ]
 
-function EarnPage({ action }: { action: (message: string) => void }) {
+type VipPackage = (typeof vipPackages)[number]
+
+type ActiveInvestment = {
+  package: VipPackage
+  amount: number
+  startedAt: string
+}
+
+function EarnPage({
+  action,
+  balance,
+  onPurchase,
+}: {
+  action: (message: string) => void
+  balance: number
+  onPurchase: (selectedPackage: VipPackage) => void
+}) {
   const [selectedPackage, setSelectedPackage] = useState<
     (typeof vipPackages)[number] | null
   >(null)
-  const availableBalance = 102.03
   const hasEnoughBalance = selectedPackage
-    ? availableBalance >= selectedPackage.minimum
+    ? balance >= selectedPackage.minimum
     : false
 
   const confirmPurchase = () => {
@@ -483,7 +547,7 @@ function EarnPage({ action }: { action: (message: string) => void }) {
       return
     }
 
-    action(`${selectedPackage.name} প্যাকেজ সফলভাবে কেনা হয়েছে`)
+    onPurchase(selectedPackage)
     setSelectedPackage(null)
   }
 
@@ -621,7 +685,7 @@ function EarnPage({ action }: { action: (message: string) => void }) {
                 </span>
                 <div>
                   <small>আপনার সম্পূর্ণ ব্যালেন্স</small>
-                  <strong>{money(availableBalance)}</strong>
+                  <strong>{money(balance)}</strong>
                 </div>
               </div>
               <div>
@@ -793,7 +857,7 @@ const teamData: Record<keyof typeof teamRates, {
 }
 
 const bengaliNumber = (value: number) =>
-  value.toLocaleString("bn-BD", { maximumFractionDigits: 0 })
+  value.toLocaleString("bn-BD", { maximumFractionDigits: 1 })
 
 const money = (value: number) =>
   `৳ ${value.toLocaleString("bn-BD", {
@@ -1069,7 +1133,8 @@ function PlaceholderPage({ page }: { page: Page }) {
 export default function App() {
   const [page, setPage] = useState<Page>("home")
   const [toast, setToast] = useState("")
-  const [claimed, setClaimed] = useState(false)
+  const [balance, setBalance] = useState(2500)
+  const [investment, setInvestment] = useState<ActiveInvestment | null>(null)
 
   const showToast = (message: string) => {
     setToast(message)
@@ -1087,20 +1152,36 @@ export default function App() {
       {page === "home" && <main className="page-content" />}
       {page === "work" && (
         <WorkPage
-          claimed={claimed}
-          onGrab={() => {
-            if (!claimed) {
-              setClaimed(true)
-              showToast("অভিনন্দন! প্রোডাক্ট গ্রাব সফল হয়েছে")
-            } else {
-              showToast("আজকের এই গ্রাবটি ইতিমধ্যে সম্পন্ন হয়েছে")
-            }
+          investment={investment}
+          onExplore={() => changePage("earn")}
+        />
+      )}
+      {page === "earn" && (
+        <EarnPage
+          action={showToast}
+          balance={balance}
+          onPurchase={(selectedPackage) => {
+            setBalance((current) => current - selectedPackage.minimum)
+            setInvestment({
+              package: selectedPackage,
+              amount: selectedPackage.minimum,
+              startedAt: new Date().toLocaleDateString("bn-BD", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              }),
+            })
+            showToast(
+              `${selectedPackage.name} সক্রিয় হয়েছে—প্রাপ্তির নতুন অধ্যায় শুরু হলো`,
+            )
+            changePage("work")
           }}
         />
       )}
-      {page === "earn" && <EarnPage action={showToast} />}
       {page === "team" && <TeamPage action={showToast} />}
-      {page === "profile" && <HomePage action={showToast} />}
+      {page === "profile" && (
+        <HomePage action={showToast} balance={balance} />
+      )}
       {!["home", "work", "earn", "team", "profile"].includes(page) && (
         <PlaceholderPage page={page} />
       )}
