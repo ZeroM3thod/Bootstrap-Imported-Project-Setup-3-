@@ -409,6 +409,784 @@ button:active {
   font-size: 12px;
 }
 
+.office-page {
+  display: grid;
+  gap: 12px;
+  padding-bottom: 28px;
+  color: #102a43;
+  background: #f4faff;
+}
+
+.office-hero {
+  position: relative;
+  padding: 17px;
+  overflow: hidden;
+  border-radius: 17px;
+  color: white;
+  background: linear-gradient(135deg, #0755bf, #078ed8 62%, #08b7df);
+  box-shadow: 0 10px 24px rgba(0, 104, 196, .18);
+}
+
+.office-hero::after {
+  position: absolute;
+  top: -54px;
+  right: -58px;
+  width: 170px;
+  height: 170px;
+  border: 24px solid rgba(255,255,255,.09);
+  border-radius: 50%;
+  content: '';
+}
+
+.office-welcome {
+  position: relative;
+  z-index: 1;
+}
+
+.office-welcome > span {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  color: #dff6ff;
+  background: rgba(255,255,255,.14);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.office-welcome h1 {
+  margin-top: 5px;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.office-welcome p {
+  max-width: 78%;
+  margin-top: 2px;
+  color: #dff3ff;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.office-balance {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 14px;
+  background: rgba(255,255,255,.12);
+}
+
+.office-balance > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: #0875cf;
+  background: white;
+}
+
+.office-balance small,
+.office-balance strong {
+  display: block;
+}
+
+.office-balance small {
+  color: #dff3ff;
+  font-size: 9px;
+}
+
+.office-balance strong {
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.office-vip-pill {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 9px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: #eaf8ff;
+  background: rgba(0, 45, 105, .2);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.office-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #e0edf6;
+  border-radius: 15px;
+  background: white;
+  box-shadow: 0 6px 18px rgba(12, 91, 145, .06);
+}
+
+.office-actions button {
+  display: flex;
+  min-width: 0;
+  min-height: 76px;
+  padding: 7px 3px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 12px;
+  color: #173b59;
+  background: #f7fbff;
+}
+
+.office-actions button > span {
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  border-radius: 12px;
+  color: #0877d1;
+  background: #e6f4ff;
+}
+
+.office-actions b {
+  max-width: 100%;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.fixed-deposit-card {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  padding: 13px;
+  overflow: hidden;
+  border: 1px solid #f0d99e;
+  border-radius: 16px;
+  background: linear-gradient(120deg, #fffaf0, #fff, #f4fbff);
+  box-shadow: 0 6px 18px rgba(145, 103, 12, .07);
+}
+
+.fixed-deposit-card.active {
+  border-color: #9edfc3;
+  background: linear-gradient(120deg, #effbf6, #fff, #f4fbff);
+}
+
+.fixed-deposit-mark {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  color: white;
+  background: linear-gradient(145deg, #e2a51e, #c27b09);
+  box-shadow: 0 6px 14px rgba(181, 116, 6, .2);
+}
+
+.fixed-deposit-card.active .fixed-deposit-mark {
+  background: linear-gradient(145deg, #13b579, #078e60);
+  box-shadow: 0 6px 14px rgba(4, 135, 89, .18);
+}
+
+.fixed-deposit-copy {
+  min-width: 0;
+}
+
+.fixed-deposit-copy > span {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: #9b6807;
+  background: #fff0c9;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.fixed-deposit-card.active .fixed-deposit-copy > span {
+  color: #08704c;
+  background: #dff6eb;
+}
+
+.fixed-deposit-copy h2 {
+  margin-top: 3px;
+  color: #5f4210;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.fixed-deposit-card.active .fixed-deposit-copy h2 {
+  color: #07583d;
+}
+
+.fixed-deposit-copy p {
+  margin-top: 2px;
+  color: #75664a;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.fixed-deposit-card > button {
+  padding: 7px 11px;
+  border: 0;
+  border-radius: 999px;
+  color: white;
+  background: linear-gradient(135deg, #d99a13, #bd7606);
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.fixed-deposit-status {
+  min-width: 96px;
+  padding: 8px 10px;
+  border-radius: 11px;
+  color: #08704c;
+  background: #e1f7ed;
+  text-align: center;
+}
+
+.fixed-deposit-status small,
+.fixed-deposit-status strong {
+  display: block;
+}
+
+.fixed-deposit-status small {
+  font-size: 8px;
+}
+
+.fixed-deposit-status strong {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.fixed-deposit-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #cfe9dd;
+  border-radius: 15px;
+  background: white;
+  box-shadow: 0 6px 18px rgba(12, 91, 75, .05);
+}
+
+.fixed-deposit-summary article {
+  display: grid;
+  grid-template: auto auto / 31px minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+  padding: 8px;
+  border-radius: 11px;
+  background: #f3fbf7;
+}
+
+.fixed-deposit-summary article > span {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 8px;
+  color: #078357;
+  background: #dff5eb;
+}
+
+.fixed-deposit-summary small,
+.fixed-deposit-summary strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.fixed-deposit-summary small {
+  color: #658075;
+  font-size: 8px;
+}
+
+.fixed-deposit-summary strong {
+  color: #08704c;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.fixed-deposit-balance {
+  margin-top: 13px;
+  padding: 15px;
+  border-radius: 14px;
+  color: white;
+  background: linear-gradient(135deg, #9b6506, #d89a15);
+  text-align: center;
+}
+
+.fixed-deposit-balance small,
+.fixed-deposit-balance strong,
+.fixed-deposit-balance span {
+  display: block;
+}
+
+.fixed-deposit-balance small {
+  color: #fff3d5;
+  font-size: 9px;
+}
+
+.fixed-deposit-balance strong {
+  margin-top: 2px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.fixed-deposit-balance span {
+  margin-top: 2px;
+  color: #fff3d5;
+  font-size: 8px;
+}
+
+.fixed-deposit-projection {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.fixed-deposit-projection > div {
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid #eadcb8;
+  border-radius: 11px;
+  background: #fffaf0;
+}
+
+.fixed-deposit-projection small,
+.fixed-deposit-projection strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.fixed-deposit-projection small {
+  color: #837251;
+  font-size: 8px;
+}
+
+.fixed-deposit-projection strong {
+  margin-top: 2px;
+  color: #8b5c08;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.fixed-deposit-rules {
+  margin-top: 11px;
+  padding: 11px 12px;
+  border: 1px solid #e0ebf3;
+  border-radius: 12px;
+  background: #f8fbfd;
+}
+
+.fixed-deposit-rules h3 {
+  color: #173b59;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.fixed-deposit-rules ol {
+  display: grid;
+  gap: 5px;
+  margin: 7px 0 0;
+  padding-left: 19px;
+  color: #536d82;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.fixed-deposit-modal .purchase-actions .confirm:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+.office-summary,
+.office-vip-card,
+.office-transactions,
+.office-tools {
+  padding: 14px;
+  border: 1px solid #e0edf6;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 6px 18px rgba(12, 91, 145, .06);
+}
+
+.office-section-heading,
+.office-section-heading > div {
+  display: flex;
+  align-items: center;
+}
+
+.office-section-heading {
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 11px;
+}
+
+.office-section-heading > div {
+  min-width: 0;
+  gap: 9px;
+}
+
+.office-section-heading > div > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  height: 36px;
+  border-radius: 11px;
+  color: #0879db;
+  background: #eaf5ff;
+}
+
+.office-section-heading h2 {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.office-section-heading p {
+  color: #6a7f91;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.office-section-heading > button,
+.office-section-heading > b {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 999px;
+  color: #0870c8;
+  background: #eef8ff;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.office-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.office-stat-grid article {
+  display: grid;
+  grid-template: auto auto / 34px minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid #deedf7;
+  border-radius: 12px;
+  background: #f8fcff;
+}
+
+.office-stat-grid article > span {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 9px;
+  color: #0875cf;
+  background: #e8f5ff;
+}
+
+.office-stat-grid small,
+.office-stat-grid strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.office-stat-grid small {
+  color: #6b7f92;
+  font-size: 8px;
+}
+
+.office-stat-grid strong {
+  color: #075da8;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.office-active-vip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.office-active-vip > div {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #dcecf7;
+  border-radius: 12px;
+  background: #f8fcff;
+}
+
+.office-active-vip .office-vip-badge {
+  color: white;
+  background: linear-gradient(145deg, #0871d2, #08a9df);
+}
+
+.office-active-vip small,
+.office-active-vip strong,
+.office-vip-badge span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.office-active-vip small {
+  color: #6b7f92;
+  font-size: 8px;
+}
+
+.office-active-vip strong,
+.office-vip-badge span {
+  color: #075da8;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.office-vip-badge span,
+.office-vip-badge small {
+  color: white;
+}
+
+.office-no-vip {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px;
+  border: 1px dashed #9ed7ed;
+  border-radius: 13px;
+  color: #0870c8;
+  background: #f5fbff;
+}
+
+.office-no-vip > div {
+  min-width: 0;
+}
+
+.office-no-vip strong {
+  display: block;
+  color: #17405f;
+  font-size: 12px;
+}
+
+.office-no-vip p {
+  color: #6a7f91;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.office-transaction-list {
+  display: grid;
+  gap: 7px;
+}
+
+.office-transaction-list article {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 9px;
+  border: 1px solid #e3eef6;
+  border-radius: 11px;
+}
+
+.office-transaction-list article > span {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 9px;
+}
+
+.office-transaction-list article > span.credit {
+  color: #078357;
+  background: #e8f8f1;
+}
+
+.office-transaction-list article > span.debit {
+  color: #cf4c34;
+  background: #fff0ed;
+}
+
+.office-transaction-list article > div {
+  min-width: 0;
+}
+
+.office-transaction-list strong,
+.office-transaction-list small {
+  display: block;
+}
+
+.office-transaction-list strong {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.office-transaction-list small {
+  color: #738697;
+  font-size: 8px;
+}
+
+.office-transaction-list article > b {
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.office-transaction-list article > b.credit { color: #078357; }
+.office-transaction-list article > b.debit { color: #cf4c34; }
+
+.office-tools {
+  display: grid;
+  gap: 5px;
+}
+
+.office-tools button {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  min-height: 53px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 11px;
+  color: #173b59;
+  background: #f8fcff;
+  text-align: left;
+}
+
+.office-tools button > span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  color: #0875cf;
+  background: #e7f4ff;
+}
+
+.office-tools button > div {
+  min-width: 0;
+}
+
+.office-tools strong,
+.office-tools small {
+  display: block;
+}
+
+.office-tools strong {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.office-tools small {
+  color: #708496;
+  font-size: 8px;
+}
+
+.office-tools button > b {
+  color: #0879d9;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.office-current-balance {
+  margin-top: 13px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  color: white;
+  background: linear-gradient(135deg, #075fc1, #078fd7);
+}
+
+.office-current-balance small,
+.office-current-balance strong {
+  display: block;
+}
+
+.office-current-balance small {
+  color: #d8efff;
+  font-size: 9px;
+}
+
+.office-current-balance strong {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.office-amount-field {
+  display: block;
+  margin-top: 12px;
+}
+
+.office-amount-field > span {
+  color: #536d82;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.office-amount-field > div {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  margin-top: 5px;
+  overflow: hidden;
+  border: 1px solid #b9dcef;
+  border-radius: 11px;
+}
+
+.office-amount-field b {
+  display: grid;
+  place-items: center;
+  color: white;
+  background: #0879d9;
+  font-size: 14px;
+}
+
+.office-amount-field input {
+  min-width: 0;
+  padding: 9px 10px;
+  border: 0;
+  outline: 0;
+  color: #102a43;
+  background: white;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.office-amount-presets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.office-amount-presets button {
+  padding: 7px 3px;
+  border: 1px solid #cfe4f3;
+  border-radius: 9px;
+  color: #0870c8;
+  background: #f5fbff;
+  font-size: 9px;
+  font-weight: 700;
+}
+
 .product-banner {
   position: relative;
   display: flex;
@@ -1389,88 +2167,6 @@ button:active {
   font-weight: 700;
 }
 
-.investment-amount-field {
-  margin-top: 12px;
-  padding: 12px;
-  border: 1px solid #cfe5f5;
-  border-radius: 13px;
-  background: #f6fbff;
-}
-
-.investment-amount-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.investment-amount-heading small,
-.investment-amount-heading strong {
-  display: block;
-}
-
-.investment-amount-heading small {
-  color: #657b8d;
-  font-size: 9px;
-}
-
-.investment-amount-heading strong {
-  color: #17405f;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.investment-amount-heading button {
-  flex: 0 0 auto;
-  padding: 6px 10px;
-  border: 1px solid #b8ddf4;
-  border-radius: 999px;
-  color: #0870c8;
-  background: white;
-  font-size: 9px;
-  font-weight: 700;
-}
-
-.investment-input-wrap {
-  display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
-  align-items: center;
-  margin-top: 8px;
-  overflow: hidden;
-  border: 1px solid #b9dcef;
-  border-radius: 10px;
-  background: white;
-}
-
-.investment-input-wrap > span {
-  display: grid;
-  place-items: center;
-  align-self: stretch;
-  color: white;
-  background: #0879d9;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.investment-input-wrap input {
-  width: 100%;
-  min-width: 0;
-  padding: 8px 10px;
-  border: 0;
-  outline: 0;
-  color: #102a43;
-  background: transparent;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.investment-amount-field > p {
-  margin-top: 6px;
-  color: #6b8092;
-  font-size: 9px;
-  line-height: 1.4;
-}
-
 .purchase-balance {
   display: grid;
   gap: 8px;
@@ -2303,6 +2999,15 @@ button:active {
     height: 50px;
   }
   .identity strong { font-size: clamp(16px, 4.7vw, 19px); }
+  .office-active-vip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .fixed-deposit-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .office-welcome p {
+    max-width: 100%;
+  }
   .stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 6px;
@@ -2451,6 +3156,33 @@ button:active {
     height: 47px;
   }
   .notice-button { padding-inline: 0; }
+  .office-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .office-actions button {
+    min-height: 68px;
+  }
+  .fixed-deposit-card {
+    grid-template-columns: 43px minmax(0, 1fr);
+  }
+  .fixed-deposit-mark {
+    width: 41px;
+    height: 41px;
+  }
+  .fixed-deposit-card > button,
+  .fixed-deposit-status {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .fixed-deposit-projection {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .office-transaction-list article {
+    grid-template-columns: 31px minmax(0, 1fr);
+  }
+  .office-transaction-list article > b {
+    grid-column: 2;
+  }
   .vip-package {
     gap: 8px;
     padding: 10px;
