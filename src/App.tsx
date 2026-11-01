@@ -1769,10 +1769,6 @@ function TeamPage({ action }: { action: (message: string) => void }) {
 
 function ProfilePage({
   action,
-  balance,
-  fixedDeposit,
-  investment,
-  transactions,
 }: {
   action: (message: string) => void
   balance: number
@@ -1780,220 +1776,84 @@ function ProfilePage({
   investment: ActiveInvestment | null
   transactions: DashboardTransaction[]
 }) {
-  const [editing, setEditing] = useState(false)
-  const [name, setName] = useState("বরজাজ")
-  const [phone, setPhone] = useState("০১৭১২ ৩৪৫ ৬৭৮")
-  const [email, setEmail] = useState("borojaj@example.com")
-  const deposits = transactions.filter((item) => item.type === "credit")
-  const totalDeposits = deposits.reduce((total, item) => total + item.amount, 0)
-
-  const saveProfile = () => {
-    setEditing(false)
-    action("প্রোফাইলের তথ্য সফলভাবে হালনাগাদ হয়েছে")
-  }
+  const stats = [
+    ["coins", "কর্মক্ষেত্রের আয়", "৳ ২,৭২৬.৩৭"],
+    ["gift", "দলীয় প্রাপ্ত", "৳ ২৮০.০০"],
+    ["users", "দলীয় লভ্যাংশ", "৳ ২৪.৫০"],
+    ["chart", "আজকের অর্জন", "৳ ১,৪০০.৭৫"],
+    ["gift", "মোট জমা", "৳ ২,৬০০.০০"],
+    ["wallet", "মোট উত্তোলন", "৳ ২০০.০০"],
+  ]
+  const menu = [
+    "সাধারণ হিসাবপত্র",
+    "জমার অর্ডার",
+    "কমিশন",
+    "লভ্যাংশ",
+    "উত্তোলন",
+    "স্টকের মূল্যায়ন",
+    "অ্যাপ ডাউনলোড",
+  ]
 
   return (
-    <main className="profile-page page-content">
-      <section className="profile-hero">
-        <div className="profile-avatar">
-          <Icon name="user" size={45} strokeWidth={1.6} />
-          <span>
-            <Icon name="check" size={14} />
-          </span>
+    <main className="home-page page-content">
+      <section className="balance-card">
+        <div className="wallet-mark">
+          <Icon name="wallet" size={37} />
         </div>
-        <div className="profile-intro">
-          <small>আমার পরিসর</small>
-          <h1>{name}</h1>
-          <p>পরিচয় সংখ্যা: ৫৮৯৯৬৩৮০</p>
-          <span>
-            <Icon name="shield" size={15} /> যাচাইকৃত সদস্য · বিশিষ্ট স্তর ০
-          </span>
+        <div>
+          <span>মোট সঞ্চয়</span>
+          <strong>৳ ১০২.০৩</strong>
         </div>
-        <button onClick={() => setEditing((current) => !current)}>
-          <Icon name={editing ? "close" : "edit"} size={18} />
-          {editing ? "বাতিল" : "সম্পাদনা"}
-        </button>
       </section>
 
-      <section className="profile-finance-grid">
-        <article>
-          <span>
-            <Icon name="wallet" size={22} />
-          </span>
-          <small>ব্যবহারযোগ্য সঞ্চয়</small>
-          <strong>{money(balance)}</strong>
-        </article>
-        <article>
-          <span>
-            <Icon name="deposit" size={22} />
-          </span>
-          <small>সর্বমোট জমা</small>
-          <strong>{money(totalDeposits)}</strong>
-        </article>
-        <article>
-          <span>
-            <Icon name="lock" size={22} />
-          </span>
-          <small>স্থির সঞ্চয়</small>
-          <strong>{money(fixedDeposit?.principal ?? 0)}</strong>
-        </article>
-        <article>
-          <span>
-            <Icon name="chart" size={22} />
-          </span>
-          <small>সক্রিয় প্যাকেজ</small>
-          <strong>{investment?.package.name ?? "নেই"}</strong>
-        </article>
-      </section>
-
-      <section className="profile-section">
-        <div className="profile-section-head">
-          <span>
-            <Icon name="user" size={21} />
-          </span>
-          <div>
-            <h2>ব্যক্তিগত তথ্য</h2>
-            <p>আপনার পরিচয় ও যোগাযোগের তথ্য যাচাই করুন</p>
+      <section className="stats-grid">
+        {stats.map(([icon, title, value]) => (
+          <div className="stat-cell" key={title}>
+            <span className="small-icon">
+              <Icon name={icon} size={23} />
+            </span>
+            <div>
+              <span>{title}</span>
+              <strong>{value}</strong>
+            </div>
           </div>
-          {!editing && (
-            <button onClick={() => setEditing(true)}>
-              <Icon name="edit" size={16} /> সম্পাদনা
-            </button>
-          )}
-        </div>
-        <div className="profile-fields">
-          <label>
-            <span>পূর্ণ নাম</span>
-            <div>
-              <Icon name="user" size={18} />
-              <input
-                disabled={!editing}
-                onChange={(event) => setName(event.target.value)}
-                value={name}
-              />
-            </div>
-          </label>
-          <label>
-            <span>মোবাইল নম্বর</span>
-            <div>
-              <Icon name="phone" size={18} />
-              <input
-                disabled={!editing}
-                onChange={(event) => setPhone(event.target.value)}
-                value={phone}
-              />
-            </div>
-          </label>
-          <label>
-            <span>ইমেইল ঠিকানা</span>
-            <div>
-              <Icon name="mail" size={18} />
-              <input
-                disabled={!editing}
-                onChange={(event) => setEmail(event.target.value)}
-                value={email}
-              />
-            </div>
-          </label>
-          <label>
-            <span>সদস্য হওয়ার দিন</span>
-            <div>
-              <Icon name="calendar" size={18} />
-              <input disabled value="১২ অক্টোবর ২০২৬" />
-            </div>
-          </label>
-        </div>
-        {editing && (
-          <button className="profile-save-button" onClick={saveProfile}>
-            পরিবর্তন সংরক্ষণ করুন
+        ))}
+      </section>
+
+      <section className="quick-grid">
+        {[
+          ["deposit", "জমা করুন"],
+          ["withdraw", "উত্তোলন"],
+          ["users", "সঙ্গীগণ"],
+          ["settings", "বিন্যাস"],
+        ].map(([icon, label]) => (
+          <button
+            key={label}
+            onClick={() => action(`${label} নির্বাচন করা হয়েছে`)}
+          >
+            <span>
+              <Icon name={icon} size={34} />
+            </span>
+            <b>{label}</b>
           </button>
-        )}
+        ))}
       </section>
 
-      <section className="profile-section">
-        <div className="profile-section-head">
-          <span>
-            <Icon name="deposit" size={21} />
-          </span>
-          <div>
-            <h2>জমা ও লেনদেন</h2>
-            <p>সাম্প্রতিক জমার ইতিহাস এক নজরে দেখুন</p>
-          </div>
-          <b>{bengaliNumber(deposits.length)}টি</b>
-        </div>
-        <div className="profile-deposit-list">
-          {deposits.slice(0, 4).map((item) => (
-            <article key={item.id}>
-              <span>
-                <Icon name="deposit" size={19} />
-              </span>
-              <div>
-                <strong>{item.label}</strong>
-                <small>{item.date}</small>
-              </div>
-              <b>+ {money(item.amount)}</b>
-            </article>
-          ))}
-        </div>
+      <section className="menu-list">
+        {menu.map((item) => (
+          <button key={item} onClick={() => action(`${item} শীঘ্রই আসছে`)}>
+            <span>{item}</span>
+            <b>›</b>
+          </button>
+        ))}
       </section>
-
-      <section className="profile-section">
-        <div className="profile-section-head">
-          <span>
-            <Icon name="shield" size={21} />
-          </span>
-          <div>
-            <h2>নিরাপত্তা ও গোপনীয়তা</h2>
-            <p>পাসওয়ার্ড ও উত্তোলন সুরক্ষা নিয়ন্ত্রণ করুন</p>
-          </div>
-        </div>
-        <div className="profile-security-list">
-          {[
-            [
-              "lock",
-              "লগইন পাসওয়ার্ড",
-              "সর্বশেষ পরিবর্তন ৩০ দিন আগে",
-              "পাসওয়ার্ড পরিবর্তনের মকআপ খোলা হয়েছে",
-            ],
-            [
-              "shield",
-              "উত্তোলন পাসওয়ার্ড",
-              "এখনও নির্ধারণ করা হয়নি",
-              "উত্তোলন পাসওয়ার্ড সেট করার মকআপ খোলা হয়েছে",
-            ],
-            [
-              "phone",
-              "মোবাইল যাচাই",
-              "০১৭১২ ৩৪৫ ৬৭৮ নম্বরটি যাচাইকৃত",
-              "মোবাইল নম্বর যাচাই সম্পন্ন",
-            ],
-            [
-              "settings",
-              "নিরাপত্তা পছন্দ",
-              "লেনদেন সতর্কতা চালু আছে",
-              "নিরাপত্তা পছন্দের মকআপ খোলা হয়েছে",
-            ],
-          ].map(([icon, title, subtitle, message]) => (
-            <button key={title} onClick={() => action(message)}>
-              <span>
-                <Icon name={icon} size={21} />
-              </span>
-              <div>
-                <strong>{title}</strong>
-                <small>{subtitle}</small>
-              </div>
-              <b>পরিবর্তন করুন</b>
-            </button>
-          ))}
-        </div>
-      </section>
-
       <button
-        className="profile-logout"
-        onClick={() => action("এটি একটি ডিজাইন মকআপ—লগআউট করা হয়নি")}
+        className="chat-button"
+        aria-label="সহায়তা"
+        onClick={() => action("সহায়তা বার্তা খোলা হয়েছে")}
       >
-        <Icon name="logout" size={20} />
-        অ্যাকাউন্ট থেকে বের হন
+        <span>•••</span>
+        <b>১</b>
       </button>
     </main>
   )
