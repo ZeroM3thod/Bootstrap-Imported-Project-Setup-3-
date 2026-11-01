@@ -147,6 +147,41 @@ function Icon({
         <path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2" />
       </>
     ),
+    edit: (
+      <>
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z" />
+      </>
+    ),
+    lock: (
+      <>
+        <rect x="4" y="10" width="16" height="11" rx="2" />
+        <path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" />
+      </>
+    ),
+    shield: (
+      <>
+        <path d="M12 3 20 6v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6Z" />
+        <path d="m9 12 2 2 4-4" />
+      </>
+    ),
+    phone: (
+      <>
+        <path d="M6 3h4l2 5-3 2a15 15 0 0 0 5 5l2-3 5 2v4c0 1.7-1.3 3-3 3C9.7 21 3 14.3 3 6a3 3 0 0 1 3-3Z" />
+      </>
+    ),
+    mail: (
+      <>
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m3 7 9 6 9-6" />
+      </>
+    ),
+    logout: (
+      <>
+        <path d="M10 17l5-5-5-5M15 12H3" />
+        <path d="M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5" />
+      </>
+    ),
   }
 
   return (
@@ -166,29 +201,53 @@ function Icon({
   )
 }
 
-function AppHeader({ onNotice }: { onNotice: () => void }) {
+function AppHeader({
+  page,
+  onNotice,
+  onProfile,
+}: {
+  page: Page
+  onNotice: () => void
+  onProfile: () => void
+}) {
+  const pageLabel = navItems.find((item) => item.id === page)?.label
+
   return (
     <header className="app-header">
-      <div className="avatar">
-        <Icon name="user" size={41} strokeWidth={1.7} />
-      </div>
-      <div className="identity">
-        <strong>
-          <span className="crown">♛</span> বরজাজ
-        </strong>
-        <span>পরিচয় সংখ্যা: ৫৮৯৯৬৩৮০</span>
-        <span>
-          <i className="diamond">◆</i> বিশিষ্ট স্তর ০
-        </span>
-      </div>
       <button
-        className="notice-button"
-        aria-label="নোটিফিকেশন"
-        onClick={onNotice}
+        aria-label="আমার পরিসর খুলুন"
+        className="header-profile"
+        onClick={onProfile}
       >
-        <Icon name="bell" size={30} />
-        <b />
+        <span className="avatar">
+          <Icon name="user" size={41} strokeWidth={1.7} />
+          <i />
+        </span>
+        <span className="identity">
+          <small>{pageLabel}</small>
+          <strong>বরজাজ</strong>
+          <span>
+            <b>আইডি ৫৮৯৯৬৩৮০</b>
+            <em>
+              <Icon name="shield" size={12} /> বিশিষ্ট স্তর ০
+            </em>
+          </span>
+        </span>
       </button>
+      <div className="header-actions">
+        <span className="header-balance">
+          <small>অ্যাকাউন্ট</small>
+          <strong>সক্রিয়</strong>
+        </span>
+        <button
+          className="notice-button"
+          aria-label="নোটিফিকেশন"
+          onClick={onNotice}
+        >
+          <Icon name="bell" size={30} />
+          <b />
+        </button>
+      </div>
     </header>
   )
 }
@@ -713,9 +772,13 @@ function HomePage({
 
 function WorkPage({
   investment,
+  fixedDeposit,
+  transactions,
   onExplore,
 }: {
   investment: ActiveInvestment | null
+  fixedDeposit: FixedDeposit | null
+  transactions: DashboardTransaction[]
   onExplore: () => void
 }) {
   const dailyRate = investment ? investment.package.dailyRate / 100 : 0
@@ -738,6 +801,9 @@ function WorkPage({
         Math.pow(1 + dailyRate, investment.package.durationDays) -
       investment.amount
     : 0
+  const fixedDepositHistory = transactions.filter((item) =>
+    item.label.includes("স্থির সঞ্চয়"),
+  )
 
   return (
     <main className="earn-page work-investment-page page-content">
@@ -853,6 +919,90 @@ function WorkPage({
             <button onClick={onExplore}>প্যাকেজ বেছে নিন</button>
           </div>
         )}
+      </section>
+
+      <section className="work-savings-card">
+        <div className="package-heading">
+          <div>
+            <span>
+              <Icon name="shield" size={21} />
+            </span>
+            <div>
+              <h2>পূর্ণ সঞ্চয়ে ২% নিশ্চিত সম্ভাবনা</h2>
+              <p>সক্রিয় স্থির সঞ্চয় ও মেয়াদপূর্তির সম্পূর্ণ খতিয়ান</p>
+            </div>
+          </div>
+          <b>{fixedDeposit ? "চলমান" : "ইতিহাস"}</b>
+        </div>
+
+        {fixedDeposit ? (
+          <article className="work-savings-active">
+            <div className="work-savings-status">
+              <span>
+                <Icon name="check" size={24} />
+              </span>
+              <div>
+                <small>৭ দিনের স্থির সঞ্চয়</small>
+                <strong>আপনার পূর্ণ সঞ্চয় নিরাপদে আবদ্ধ</strong>
+                <p>শুরুর দিন {fixedDeposit.startedAt}</p>
+              </div>
+            </div>
+            <div className="work-savings-metrics">
+              <div>
+                <small>আবদ্ধ মূলধন</small>
+                <strong>{money(fixedDeposit.principal)}</strong>
+              </div>
+              <div>
+                <small>নিশ্চিত লাভ</small>
+                <strong>+ {money(fixedDeposit.profit)}</strong>
+              </div>
+              <div>
+                <small>মেয়াদশেষে মোট</small>
+                <strong>{money(fixedDeposit.maturityAmount)}</strong>
+              </div>
+              <div>
+                <small>মেয়াদ ফুরোবে</small>
+                <strong>{fixedDeposit.expiresAt}</strong>
+              </div>
+            </div>
+          </article>
+        ) : (
+          <div className="work-savings-empty">
+            <Icon name="calendar" size={30} />
+            <div>
+              <strong>বর্তমানে কোনো স্থির সঞ্চয় চলমান নেই</strong>
+              <p>মূল অফিস থেকে পূর্ণ সঞ্চয় ৭ দিনের জন্য স্থির করলে এখানে দেখা যাবে।</p>
+            </div>
+          </div>
+        )}
+
+        <div className="work-savings-history">
+          <div className="work-history-title">
+            <h3>স্থির সঞ্চয়ের ইতিহাস</h3>
+            <span>{bengaliNumber(fixedDepositHistory.length)}টি রেকর্ড</span>
+          </div>
+          {fixedDepositHistory.length > 0 ? (
+            fixedDepositHistory.map((item) => (
+              <article key={item.id}>
+                <span className={item.type}>
+                  <Icon
+                    name={item.type === "credit" ? "deposit" : "lock"}
+                    size={19}
+                  />
+                </span>
+                <div>
+                  <strong>{item.label}</strong>
+                  <small>{item.date}</small>
+                </div>
+                <b className={item.type}>
+                  {item.type === "credit" ? "+" : "−"} {money(item.amount)}
+                </b>
+              </article>
+            ))
+          ) : (
+            <p className="work-history-empty">এখনও কোনো স্থির সঞ্চয়ের রেকর্ড নেই।</p>
+          )}
+        </div>
       </section>
 
       {investment && (
@@ -1617,6 +1767,238 @@ function TeamPage({ action }: { action: (message: string) => void }) {
   )
 }
 
+function ProfilePage({
+  action,
+  balance,
+  fixedDeposit,
+  investment,
+  transactions,
+}: {
+  action: (message: string) => void
+  balance: number
+  fixedDeposit: FixedDeposit | null
+  investment: ActiveInvestment | null
+  transactions: DashboardTransaction[]
+}) {
+  const [editing, setEditing] = useState(false)
+  const [name, setName] = useState("বরজাজ")
+  const [phone, setPhone] = useState("০১৭১২ ৩৪৫ ৬৭৮")
+  const [email, setEmail] = useState("borojaj@example.com")
+  const deposits = transactions.filter((item) => item.type === "credit")
+  const totalDeposits = deposits.reduce((total, item) => total + item.amount, 0)
+
+  const saveProfile = () => {
+    setEditing(false)
+    action("প্রোফাইলের তথ্য সফলভাবে হালনাগাদ হয়েছে")
+  }
+
+  return (
+    <main className="profile-page page-content">
+      <section className="profile-hero">
+        <div className="profile-avatar">
+          <Icon name="user" size={45} strokeWidth={1.6} />
+          <span>
+            <Icon name="check" size={14} />
+          </span>
+        </div>
+        <div className="profile-intro">
+          <small>আমার পরিসর</small>
+          <h1>{name}</h1>
+          <p>পরিচয় সংখ্যা: ৫৮৯৯৬৩৮০</p>
+          <span>
+            <Icon name="shield" size={15} /> যাচাইকৃত সদস্য · বিশিষ্ট স্তর ০
+          </span>
+        </div>
+        <button onClick={() => setEditing((current) => !current)}>
+          <Icon name={editing ? "close" : "edit"} size={18} />
+          {editing ? "বাতিল" : "সম্পাদনা"}
+        </button>
+      </section>
+
+      <section className="profile-finance-grid">
+        <article>
+          <span>
+            <Icon name="wallet" size={22} />
+          </span>
+          <small>ব্যবহারযোগ্য সঞ্চয়</small>
+          <strong>{money(balance)}</strong>
+        </article>
+        <article>
+          <span>
+            <Icon name="deposit" size={22} />
+          </span>
+          <small>সর্বমোট জমা</small>
+          <strong>{money(totalDeposits)}</strong>
+        </article>
+        <article>
+          <span>
+            <Icon name="lock" size={22} />
+          </span>
+          <small>স্থির সঞ্চয়</small>
+          <strong>{money(fixedDeposit?.principal ?? 0)}</strong>
+        </article>
+        <article>
+          <span>
+            <Icon name="chart" size={22} />
+          </span>
+          <small>সক্রিয় প্যাকেজ</small>
+          <strong>{investment?.package.name ?? "নেই"}</strong>
+        </article>
+      </section>
+
+      <section className="profile-section">
+        <div className="profile-section-head">
+          <span>
+            <Icon name="user" size={21} />
+          </span>
+          <div>
+            <h2>ব্যক্তিগত তথ্য</h2>
+            <p>আপনার পরিচয় ও যোগাযোগের তথ্য যাচাই করুন</p>
+          </div>
+          {!editing && (
+            <button onClick={() => setEditing(true)}>
+              <Icon name="edit" size={16} /> সম্পাদনা
+            </button>
+          )}
+        </div>
+        <div className="profile-fields">
+          <label>
+            <span>পূর্ণ নাম</span>
+            <div>
+              <Icon name="user" size={18} />
+              <input
+                disabled={!editing}
+                onChange={(event) => setName(event.target.value)}
+                value={name}
+              />
+            </div>
+          </label>
+          <label>
+            <span>মোবাইল নম্বর</span>
+            <div>
+              <Icon name="phone" size={18} />
+              <input
+                disabled={!editing}
+                onChange={(event) => setPhone(event.target.value)}
+                value={phone}
+              />
+            </div>
+          </label>
+          <label>
+            <span>ইমেইল ঠিকানা</span>
+            <div>
+              <Icon name="mail" size={18} />
+              <input
+                disabled={!editing}
+                onChange={(event) => setEmail(event.target.value)}
+                value={email}
+              />
+            </div>
+          </label>
+          <label>
+            <span>সদস্য হওয়ার দিন</span>
+            <div>
+              <Icon name="calendar" size={18} />
+              <input disabled value="১২ অক্টোবর ২০২৬" />
+            </div>
+          </label>
+        </div>
+        {editing && (
+          <button className="profile-save-button" onClick={saveProfile}>
+            পরিবর্তন সংরক্ষণ করুন
+          </button>
+        )}
+      </section>
+
+      <section className="profile-section">
+        <div className="profile-section-head">
+          <span>
+            <Icon name="deposit" size={21} />
+          </span>
+          <div>
+            <h2>জমা ও লেনদেন</h2>
+            <p>সাম্প্রতিক জমার ইতিহাস এক নজরে দেখুন</p>
+          </div>
+          <b>{bengaliNumber(deposits.length)}টি</b>
+        </div>
+        <div className="profile-deposit-list">
+          {deposits.slice(0, 4).map((item) => (
+            <article key={item.id}>
+              <span>
+                <Icon name="deposit" size={19} />
+              </span>
+              <div>
+                <strong>{item.label}</strong>
+                <small>{item.date}</small>
+              </div>
+              <b>+ {money(item.amount)}</b>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="profile-section">
+        <div className="profile-section-head">
+          <span>
+            <Icon name="shield" size={21} />
+          </span>
+          <div>
+            <h2>নিরাপত্তা ও গোপনীয়তা</h2>
+            <p>পাসওয়ার্ড ও উত্তোলন সুরক্ষা নিয়ন্ত্রণ করুন</p>
+          </div>
+        </div>
+        <div className="profile-security-list">
+          {[
+            [
+              "lock",
+              "লগইন পাসওয়ার্ড",
+              "সর্বশেষ পরিবর্তন ৩০ দিন আগে",
+              "পাসওয়ার্ড পরিবর্তনের মকআপ খোলা হয়েছে",
+            ],
+            [
+              "shield",
+              "উত্তোলন পাসওয়ার্ড",
+              "এখনও নির্ধারণ করা হয়নি",
+              "উত্তোলন পাসওয়ার্ড সেট করার মকআপ খোলা হয়েছে",
+            ],
+            [
+              "phone",
+              "মোবাইল যাচাই",
+              "০১৭১২ ৩৪৫ ৬৭৮ নম্বরটি যাচাইকৃত",
+              "মোবাইল নম্বর যাচাই সম্পন্ন",
+            ],
+            [
+              "settings",
+              "নিরাপত্তা পছন্দ",
+              "লেনদেন সতর্কতা চালু আছে",
+              "নিরাপত্তা পছন্দের মকআপ খোলা হয়েছে",
+            ],
+          ].map(([icon, title, subtitle, message]) => (
+            <button key={title} onClick={() => action(message)}>
+              <span>
+                <Icon name={icon} size={21} />
+              </span>
+              <div>
+                <strong>{title}</strong>
+                <small>{subtitle}</small>
+              </div>
+              <b>পরিবর্তন করুন</b>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <button
+        className="profile-logout"
+        onClick={() => action("এটি একটি ডিজাইন মকআপ—লগআউট করা হয়নি")}
+      >
+        <Icon name="logout" size={20} />
+        অ্যাকাউন্ট থেকে বের হন
+      </button>
+    </main>
+  )
+}
+
 function PlaceholderPage({ page }: { page: Page }) {
   const current = navItems.find((item) => item.id === page)!
   return (
@@ -1737,7 +2119,11 @@ export default function App() {
 
   return (
     <div className="app blue-header">
-      <AppHeader onNotice={() => showToast("কোনো নতুন নোটিফিকেশন নেই")} />
+      <AppHeader
+        onNotice={() => showToast("কোনো নতুন নোটিফিকেশন নেই")}
+        onProfile={() => changePage("profile")}
+        page={page}
+      />
       {page === "home" && (
         <HomePage
           action={showToast}
@@ -1753,8 +2139,10 @@ export default function App() {
       )}
       {page === "work" && (
         <WorkPage
+          fixedDeposit={fixedDeposit}
           investment={investment}
           onExplore={() => changePage("earn")}
+          transactions={transactions}
         />
       )}
       {page === "earn" && (
@@ -1785,15 +2173,11 @@ export default function App() {
       )}
       {page === "team" && <TeamPage action={showToast} />}
       {page === "profile" && (
-        <HomePage
+        <ProfilePage
           action={showToast}
           balance={balance}
           fixedDeposit={fixedDeposit}
           investment={investment}
-          onDeposit={deposit}
-          onFixedDeposit={activateFixedDeposit}
-          onNavigate={changePage}
-          onWithdraw={withdraw}
           transactions={transactions}
         />
       )}
