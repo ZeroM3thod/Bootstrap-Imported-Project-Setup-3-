@@ -341,11 +341,11 @@ function HomePage({
 
   const submitMoneyAction = () => {
     if (!moneyAction || amount <= 0) {
-      action("সঠিক একটি অঙ্ক লিখুন")
+      action("সঠিক অঙ্ক লিখুন")
       return
     }
     if (moneyAction === "withdraw" && amount > balance) {
-      action("উত্তোলনের অঙ্কটি আপনার বর্তমান সঞ্চয়ের চেয়ে বেশি")
+      action("পর্যাপ্ত সঞ্চয় নেই")
       return
     }
 
@@ -360,7 +360,7 @@ function HomePage({
 
   const confirmFixedDeposit = () => {
     if (balance <= 0) {
-      action("স্থির সঞ্চয়ে রাখার মতো ব্যবহারযোগ্য অর্থ নেই")
+      action("সঞ্চয় নেই")
       return
     }
     onFixedDeposit()
@@ -374,7 +374,7 @@ function HomePage({
           <div className="office-welcome">
             <span>আপনার মূল অফিস</span>
             <h1>স্বাগতম, বরজাজ</h1>
-            <p>সঞ্চয়, প্রাপ্তি আর অগ্রযাত্রার সব খবর এক আকাশের নিচে।</p>
+            <p>সব হিসাব একসাথে</p>
           </div>
           <div className="office-balance">
             <span>
@@ -387,7 +387,7 @@ function HomePage({
           </div>
           <div className="office-vip-pill">
             <Icon name={investment ? "check" : "clock"} size={16} />
-            {investment ? investment.package.name : "কোনো প্যাকেজ সক্রিয় নেই"}
+            {investment ? investment.package.name : "প্যাকেজ সক্রিয় নয়"}
           </div>
         </section>
 
@@ -418,16 +418,16 @@ function HomePage({
             <Icon name={fixedDeposit ? "check" : "calendar"} size={27} />
           </div>
           <div className="fixed-deposit-copy">
-            <span>৭ দিনের স্থির সঞ্চয়</span>
+            <span>৭ দিনের সঞ্চয়</span>
             <h2>
               {fixedDeposit
-                ? "আপনার সঞ্চয় নিরাপদ মেয়াদে আবদ্ধ"
-                : "পূর্ণ সঞ্চয়ে ২% নিশ্চিত সম্ভাবনা"}
+                ? "সঞ্চয় নিরাপদে আবদ্ধ"
+                : "২% নিশ্চিত লাভ"}
             </h2>
             <p>
               {fixedDeposit
-                ? `${money(fixedDeposit.principal)} মেয়াদ ফুরোনো পর্যন্ত উত্তোলন করা যাবে না।`
-                : "বর্তমান ব্যবহারযোগ্য সম্পূর্ণ সঞ্চয় ৭ দিনের জন্য স্থির রেখে মেয়াদ শেষে ২% লাভ পান।"}
+                ? `${money(fixedDeposit.principal)} এখন আবদ্ধ`
+                : "সাপ্তাহিক ২% লাভ"}
             </p>
           </div>
           {fixedDeposit ? (
@@ -476,14 +476,14 @@ function HomePage({
                 <Icon name="chart" size={20} />
               </span>
               <div>
-                <h2>আজকের হিসাবচিত্র</h2>
-                <p>আপনার অর্থযাত্রার সংক্ষিপ্ত প্রতিচ্ছবি</p>
+                <h2>আজকের হিসাব</h2>
+                <p>আজকের আর্থিক সারাংশ</p>
               </div>
             </div>
           </div>
           <div className="office-stat-grid">
             {[
-              ["coins", "আজকের সম্ভাব্য লাভ", money(dailyProfit)],
+              ["coins", "আজকের লাভ", money(dailyProfit)],
               ["deposit", "মোট জমা", money(totalDeposited)],
               ["withdraw", "মোট উত্তোলন", money(totalWithdrawn)],
               [
@@ -513,7 +513,7 @@ function HomePage({
               </span>
               <div>
                 <h2>ভিআইপি অগ্রযাত্রা</h2>
-                <p>আপনার সক্রিয় প্যাকেজ ও মেয়াদের খবর</p>
+                <p>প্যাকেজ ও মেয়াদ</p>
               </div>
             </div>
             <button onClick={() => onNavigate(investment ? "work" : "earn")}>
@@ -545,8 +545,8 @@ function HomePage({
             <div className="office-no-vip">
               <Icon name="chart" size={34} />
               <div>
-                <strong>অর্জনের প্রথম সোপান এখনও বাকি</strong>
-                <p>৳৫০০ থেকে শুরু হওয়া ভিআইপি প্যাকেজে আপনার পথচলা শুরু করুন।</p>
+                <strong>প্যাকেজ সক্রিয় নয়</strong>
+                <p>৳৫০০ থেকে শুরু</p>
               </div>
             </div>
           )}
@@ -560,7 +560,7 @@ function HomePage({
               </span>
               <div>
                 <h2>সাম্প্রতিক হিসাব</h2>
-                <p>জমা, উত্তোলন ও প্যাকেজ ক্রয়ের পদচিহ্ন</p>
+                <p>সাম্প্রতিক লেনদেন</p>
               </div>
             </div>
             <b>{bengaliNumber(transactions.length)}টি</b>
@@ -588,16 +588,16 @@ function HomePage({
 
         <section className="office-tools">
           {[
-            ["users", "সাফল্যের সঙ্গী", "দল ও কমিশনের খতিয়ান", "team"],
-            ["bell", "বার্তা ও ঘোষণা", "নতুন কোনো ঘোষণা নেই", null],
-            ["settings", "নিরাপত্তা ও বিন্যাস", "হিসাবের সুরক্ষা যাচাই করুন", null],
+            ["users", "সাফল্যের সঙ্গী", "দল ও কমিশন", "team"],
+            ["bell", "বার্তা ও ঘোষণা", "নতুন ঘোষণা নেই", null],
+            ["settings", "নিরাপত্তা ও বিন্যাস", "সুরক্ষা যাচাই করুন", null],
           ].map(([icon, title, subtitle, destination]) => (
             <button
               key={title}
               onClick={() =>
                 destination
                   ? onNavigate(destination as Page)
-                  : action(`${title} শীঘ্রই উন্মুক্ত হবে`)
+                  : action(`${title} শীঘ্রই আসছে`)
               }
             >
               <span>
@@ -704,8 +704,8 @@ function HomePage({
                   <Icon name="calendar" size={22} />
                 </span>
                 <div>
-                  <small>সাত দিনের নিরাপদ অঙ্গীকার</small>
-                  <h2>পূর্ণ সঞ্চয় স্থির করুন</h2>
+                  <small>৭ দিনের সঞ্চয়</small>
+                  <h2>সঞ্চয় স্থির করুন</h2>
                 </div>
               </div>
               <button
@@ -717,9 +717,9 @@ function HomePage({
             </div>
 
             <div className="fixed-deposit-balance">
-              <small>স্থির সঞ্চয়ে আবদ্ধ হবে</small>
+              <small>আবদ্ধ হবে</small>
               <strong>{money(balance)}</strong>
-              <span>আপনার সম্পূর্ণ ব্যবহারযোগ্য সঞ্চয়</span>
+              <span>সম্পূর্ণ সঞ্চয়</span>
             </div>
 
             <div className="fixed-deposit-projection">
@@ -740,11 +740,11 @@ function HomePage({
             <div className="fixed-deposit-rules">
               <h3>স্থির সঞ্চয়ের নিয়মাবলি</h3>
               <ol>
-                <li>বর্তমান ব্যবহারযোগ্য সম্পূর্ণ সঞ্চয় একসঙ্গে আবদ্ধ হবে।</li>
-                <li>সাত দিন পূর্ণ হওয়ার আগে এই অর্থ উত্তোলন করা যাবে না।</li>
-                <li>মেয়াদ শেষে মূলধনের সঙ্গে ২% লাভ যুক্ত হবে।</li>
-                <li>পরে জমা করা নতুন অর্থ আলাদা থাকবে এবং উত্তোলনযোগ্য হবে।</li>
-                <li>নিশ্চিত করার পর এই সাত দিনের অঙ্গীকার বাতিল করা যাবে না।</li>
+              <li>সঞ্চয় আবদ্ধ হবে</li>
+              <li>আগে উত্তোলন নয়</li>
+              <li>২% লাভ যুক্ত</li>
+              <li>নতুন জমা উত্তোলনযোগ্য</li>
+              <li>পরে বাতিল নয়</li>
               </ol>
             </div>
 
@@ -760,7 +760,7 @@ function HomePage({
                 disabled={balance <= 0}
                 onClick={confirmFixedDeposit}
               >
-                সম্পূর্ণ সঞ্চয় স্থির করুন
+                সঞ্চয় স্থির করুন
               </button>
             </div>
           </section>
@@ -812,12 +812,9 @@ function WorkPage({
           <Icon name="work" size={38} />
         </div>
         <div>
-          <span className="earn-kicker">সঞ্চয়ের বীজ থেকে প্রাপ্তির ফুল</span>
+          <span className="earn-kicker">দৈনিক আয়</span>
           <h1>আপনার কর্মক্ষেত্র</h1>
-          <p>
-            যে পুঁজি আজ আশার মাটিতে রাখলেন, তার প্রতিদিনের লভ্যাংশ এখানে
-            ভোরের আলোর মতো ফুটে উঠবে।
-          </p>
+          <p>প্যাকেজের দৈনিক হিসাব</p>
         </div>
         <div className="earn-overview">
           <div>
@@ -825,7 +822,7 @@ function WorkPage({
             <strong>{investment ? investment.package.name : "এখনও নেই"}</strong>
           </div>
           <div>
-            <small>প্রতিদিনের প্রাপ্তি</small>
+            <small>দৈনিক লাভ</small>
             <strong>{investment ? money(firstDayProfit) : money(0)}</strong>
           </div>
         </div>
@@ -838,8 +835,8 @@ function WorkPage({
               <Icon name="wallet" size={21} />
             </span>
             <div>
-              <h2>সক্রিয় প্যাকেজের খতিয়ান</h2>
-              <p>পুঁজি, হার ও প্রতিদিনের প্রাপ্তি—সবটুকু এক নজরে</p>
+                <h2>সক্রিয় প্যাকেজ</h2>
+              <p>পুঁজি ও লাভ</p>
             </div>
           </div>
           {investment && <b>চলমান</b>}
@@ -847,75 +844,54 @@ function WorkPage({
 
         {investment ? (
           <>
-            <article className="vip-package active-investment-card">
-              <div className="package-number">
-                <Icon name="check" size={21} />
-              </div>
-              <div className="package-main">
-                <div className="package-name">
-                  <span>{investment.package.name}</span>
+            <article className="active-package-card">
+              <div className="active-package-head">
+                <span>
+                  <Icon name="check" size={21} />
+                </span>
+                <div>
+                  <h3>{investment.package.name}</h3>
                   <small>
-                    {bengaliNumber(investment.package.durationDays)} দিনের
-                    প্রাপ্তির সোপান
+                    {bengaliNumber(investment.package.durationDays)} দিনের মেয়াদ
                   </small>
                 </div>
-                <div className="package-range">
-                  <small>যাত্রা শুরুর দিন</small>
-                  <strong>{investment.startedAt}</strong>
-                  <small>মেয়াদ ফুরোনোর দিন</small>
-                  <strong>{investment.expiresAt}</strong>
-                </div>
-                <div className="package-profit">
-                  <span>
-                    <Icon name="chart" size={17} />
-                  </span>
-                  <div>
-                    <small>প্রতিদিন সম্ভাব্য লভ্যাংশ</small>
-                    <strong>
-                      {bengaliNumber(investment.package.dailyRate)}% ·{" "}
-                      {money(firstDayProfit)}
-                    </strong>
-                  </div>
-                </div>
-                <span className="investment-status">সক্রিয়</span>
+                <b>সক্রিয়</b>
               </div>
-            </article>
-
-            <div className="investment-metrics">
+              <div className="active-package-metrics">
               {[
-                ["wallet", "রোপিত পুঁজি", money(investment.amount)],
+                ["প্যাকেজ মূল্য", money(investment.amount)],
                 [
-                  "chart",
-                  "প্রতিদিনের হার",
+                  "দৈনিক হার",
                   `${bengaliNumber(investment.package.dailyRate)}%`,
                 ],
-                ["coins", "প্রথম দিনের প্রাপ্তি", money(firstDayProfit)],
-                [
-                  "calendar",
-                  "মেয়াদ শেষে মোট লাভ",
-                  money(termProfit),
-                ],
-              ].map(([icon, label, value]) => (
-                <article key={label}>
-                  <span>
-                    <Icon name={icon} size={20} />
-                  </span>
+                ["দৈনিক লাভ", money(firstDayProfit)],
+                ["মোট লাভ", money(termProfit)],
+              ].map(([label, value]) => (
+                <div key={label}>
                   <small>{label}</small>
                   <strong>{value}</strong>
-                </article>
+                </div>
               ))}
-            </div>
+              </div>
+              <div className="active-package-dates">
+                <div>
+                  <small>শুরুর তারিখ</small>
+                  <strong>{investment.startedAt}</strong>
+                </div>
+                <div>
+                  <small>শেষ তারিখ</small>
+                  <strong>{investment.expiresAt}</strong>
+                </div>
+              </div>
+            </article>
           </>
         ) : (
           <div className="investment-empty">
             <span>
               <Icon name="work" size={42} />
             </span>
-            <h2>এখনও সঞ্চয়ের বীজ বোনা হয়নি</h2>
-            <p>
-              অর্জনের পথ থেকে একটি প্যাকেজ বেছে নিন; তারপর প্রতিদিনের প্রাপ্তির
-              কাব্য এই পাতায় লেখা হবে।
-            </p>
+            <h2>প্যাকেজ সক্রিয় নয়</h2>
+            <p>প্যাকেজ বেছে নিন</p>
             <button onClick={onExplore}>প্যাকেজ বেছে নিন</button>
           </div>
         )}
@@ -928,8 +904,8 @@ function WorkPage({
               <Icon name="shield" size={21} />
             </span>
             <div>
-              <h2>পূর্ণ সঞ্চয়ে ২% নিশ্চিত সম্ভাবনা</h2>
-              <p>সক্রিয় স্থির সঞ্চয় ও মেয়াদপূর্তির সম্পূর্ণ খতিয়ান</p>
+              <h2>২% নিশ্চিত লাভ</h2>
+              <p>সঞ্চয়ের মেয়াদি হিসাব</p>
             </div>
           </div>
           <b>{fixedDeposit ? "চলমান" : "ইতিহাস"}</b>
@@ -942,8 +918,8 @@ function WorkPage({
                 <Icon name="check" size={24} />
               </span>
               <div>
-                <small>৭ দিনের স্থির সঞ্চয়</small>
-                <strong>আপনার পূর্ণ সঞ্চয় নিরাপদে আবদ্ধ</strong>
+                <small>৭ দিনের সঞ্চয়</small>
+                <strong>সঞ্চয় নিরাপদে আবদ্ধ</strong>
                 <p>শুরুর দিন {fixedDeposit.startedAt}</p>
               </div>
             </div>
@@ -970,15 +946,15 @@ function WorkPage({
           <div className="work-savings-empty">
             <Icon name="calendar" size={30} />
             <div>
-              <strong>বর্তমানে কোনো স্থির সঞ্চয় চলমান নেই</strong>
-              <p>মূল অফিস থেকে পূর্ণ সঞ্চয় ৭ দিনের জন্য স্থির করলে এখানে দেখা যাবে।</p>
+              <strong>স্থির সঞ্চয় নেই</strong>
+              <p>সঞ্চয় এখানে দেখুন</p>
             </div>
           </div>
         )}
 
         <div className="work-savings-history">
           <div className="work-history-title">
-            <h3>স্থির সঞ্চয়ের ইতিহাস</h3>
+            <h3>সঞ্চয় ইতিহাস</h3>
             <span>{bengaliNumber(fixedDepositHistory.length)}টি রেকর্ড</span>
           </div>
           {fixedDepositHistory.length > 0 ? (
@@ -1000,7 +976,7 @@ function WorkPage({
               </article>
             ))
           ) : (
-            <p className="work-history-empty">এখনও কোনো স্থির সঞ্চয়ের রেকর্ড নেই।</p>
+            <p className="work-history-empty">কোনো রেকর্ড নেই</p>
           )}
         </div>
       </section>
@@ -1013,8 +989,8 @@ function WorkPage({
                 <Icon name="calendar" size={21} />
               </span>
               <div>
-                <h2>দিনে দিনে প্রাপ্তির পঙ্‌ক্তি</h2>
-                <p>প্রতিটি ভোরে একই হারে সম্ভাবনার নতুন অঙ্কুর</p>
+                <h2>দৈনিক লাভের হিসাব</h2>
+                <p>লাভ ও ব্যালেন্স</p>
               </div>
             </div>
             <b>দৈনিক</b>
@@ -1025,11 +1001,10 @@ function WorkPage({
                 <span>{bengaliNumber(index + 1)}</span>
                 <div>
                   <strong>
-                    {bengaliNumber(row.day)}তম দিনের সম্ভাব্য প্রাপ্তি
+                    {bengaliNumber(row.day)}তম দিনের লাভ
                   </strong>
                   <small>
-                    দিনের শুরু {money(row.openingBalance)} · দিনশেষে{" "}
-                    {money(row.closingBalance)}
+                    {money(row.openingBalance)} → {money(row.closingBalance)}
                   </small>
                 </div>
                 <b>+ {money(row.profit)}</b>
@@ -1044,11 +1019,8 @@ function WorkPage({
           <Icon name="check" size={20} />
         </span>
         <div>
-          <h2>মনে রাখার কথা</h2>
-          <p>
-            প্রতিদিনের লাভ আগের দিনের পুঁজি ও প্রাপ্তি মিলিয়ে নতুন অঙ্কের ওপর
-            হিসাব হয়; তাই সঞ্চয়ের নদী দিনে দিনে আরও প্রশস্ত হয়ে বয়ে চলে।
-          </p>
+          <h2>হিসাবের নিয়ম</h2>
+          <p>দৈনিক চক্রবৃদ্ধি হিসাব</p>
         </div>
       </section>
     </main>
@@ -1120,7 +1092,7 @@ function EarnPage({
     .find((item) => balance >= item.price)
   const amountError = selectedPackage
     ? balance < selectedPackage.price
-      ? "এই প্যাকেজে পা রাখার মতো পর্যাপ্ত সঞ্চয় এখনও জমেনি।"
+      ? "পর্যাপ্ত সঞ্চয় নেই"
       : ""
     : ""
   const selectedExpiry = selectedPackage
@@ -1152,10 +1124,7 @@ function EarnPage({
           <div>
             <span className="earn-kicker">বিনিয়োগ পরিকল্পনা</span>
             <h1>আপনার অর্জনের পথ</h1>
-            <p>
-              নিজের সামর্থ্য অনুযায়ী একটি ভিআইপি প্যাকেজ বেছে নিয়ে প্রতিদিনের
-              সম্ভাব্য লাভের পথে এগিয়ে যান।
-            </p>
+            <p>প্যাকেজ বেছে নিন</p>
           </div>
           <div className="earn-overview">
             <div>
@@ -1177,7 +1146,7 @@ function EarnPage({
               </span>
               <div>
                 <h2>ভিআইপি প্যাকেজসমূহ</h2>
-                <p>নির্ধারিত মূল্য, দৈনিক লাভ ও মেয়াদ দেখে প্যাকেজ বেছে নিন</p>
+                <p>মূল্য ও লাভ</p>
               </div>
             </div>
             <b>৬টি স্তর</b>
@@ -1189,12 +1158,8 @@ function EarnPage({
                 <Icon name="target" size={20} />
               </span>
               <div>
-                <small>আপনার সঞ্চয়ের সঙ্গে মানানসই প্রস্তাব</small>
+                <small>প্রস্তাবিত প্যাকেজ</small>
                 <strong>{suggestedPackage.name}</strong>
-                <p>
-                  বর্তমান {money(balance)} সঞ্চয়ে এই নির্ধারিত মূল্যের প্যাকেজটি
-                  সবচেয়ে মানানসই।
-                </p>
               </div>
             </div>
           )}
@@ -1204,40 +1169,42 @@ function EarnPage({
               <article
                 className={
                   suggestedPackage?.name === item.name
-                    ? "vip-package suggested-package"
-                    : "vip-package"
+                    ? "tier-package-card suggested-package"
+                    : "tier-package-card"
                 }
                 key={item.name}
               >
-                <div className="package-number">{bengaliNumber(index)}</div>
-                <div className="package-main">
+                <div className="tier-package-head">
+                  <div className="package-number">{bengaliNumber(index)}</div>
                   <div className="package-name">
                     <span>{item.name}</span>
                     <small>
                       {suggestedPackage?.name === item.name
-                        ? "আপনার জন্য প্রস্তাবিত সোপান"
+                        ? "প্রস্তাবিত প্যাকেজ"
                         : "বিনিয়োগ স্তর"}
                     </small>
                   </div>
-                  <div className="package-range">
-                    <small>নির্ধারিত মূল্য</small>
+                  {suggestedPackage?.name === item.name && (
+                    <b className="tier-package-tag">সেরা পছন্দ</b>
+                  )}
+                </div>
+                <div className="tier-package-metrics">
+                  <div>
+                    <small>প্যাকেজ মূল্য</small>
                     <strong>{money(item.price)}</strong>
                   </div>
-                  <div className="package-profit">
-                    <span>
-                      <Icon name="chart" size={17} />
-                    </span>
-                    <div>
-                      <small>
-                        প্রতিদিনের লাভ · {bengaliNumber(item.durationDays)} দিন
-                      </small>
-                      <strong>{bengaliNumber(item.dailyRate)}%</strong>
-                    </div>
+                  <div>
+                    <small>দৈনিক লাভ</small>
+                    <strong>{bengaliNumber(item.dailyRate)}%</strong>
                   </div>
-                  <button onClick={() => openPackage(item)}>
-                    প্যাকেজ কিনুন
-                  </button>
+                  <div>
+                    <small>মেয়াদ</small>
+                    <strong>{bengaliNumber(item.durationDays)} দিন</strong>
+                  </div>
                 </div>
+                <button onClick={() => openPackage(item)}>
+                  প্যাকেজ কিনুন
+                </button>
               </article>
             ))}
           </div>
@@ -1249,11 +1216,7 @@ function EarnPage({
           </span>
           <div>
             <h2>গুরুত্বপূর্ণ তথ্য</h2>
-            <p>
-              প্রতিটি প্যাকেজের মূল্য ও মেয়াদ নির্ধারিত। প্রতিদিনের লাভ আগের
-              দিনের মোট অঙ্কে যুক্ত হয়ে মেয়াদ ফুরোনো পর্যন্ত নতুন লাভের বীজ
-              বুনবে।
-            </p>
+            <p>লাভ ব্যালেন্সে যুক্ত</p>
           </div>
         </section>
       </main>
@@ -1332,21 +1295,10 @@ function EarnPage({
             <div className="purchase-rules">
               <h3>প্যাকেজ কেনার নিয়ম</h3>
               <ol>
-                <li>
-                  ক্রয় নিশ্চিত করলে প্যাকেজের নির্ধারিত মূল্য সঞ্চয় থেকে কাটা
-                  হবে।
-                </li>
-                <li>
-                  পর্যাপ্ত ব্যালেন্স থাকলে নির্বাচিত প্যাকেজ সঙ্গে সঙ্গে সক্রিয়
-                  হবে।
-                </li>
-                <li>
-                  প্রতিদিনের লাভ আগের দিনের পুঁজি ও লাভের সম্মিলিত অঙ্কের ওপর
-                  নতুন করে হিসাব হবে।
-                </li>
-                <li>
-                  নির্ধারিত মেয়াদ শেষে প্যাকেজটি স্বয়ংক্রিয়ভাবে ফুরিয়ে যাবে।
-                </li>
+                <li>মূল্য কাটা হবে</li>
+                <li>প্যাকেজ তাৎক্ষণিক সক্রিয়</li>
+                <li>লাভ দৈনিক হিসাব</li>
+                <li>মেয়াদে প্যাকেজ শেষ</li>
               </ol>
             </div>
 
@@ -1386,7 +1338,7 @@ const teamData: Record<keyof typeof teamRates, {
   list: TeamMember[]
 }> = {
   1: {
-    title: "লেভেল ১ ডিরেক্ট টিম",
+    title: "লেভেল ১ দল",
     members: 25,
     active: 18,
     teamDeposit: 52000,
@@ -1423,7 +1375,7 @@ const teamData: Record<keyof typeof teamRates, {
     ],
   },
   2: {
-    title: "লেভেল ২ ইনডাইরেক্ট টিম",
+    title: "লেভেল ২ দল",
     members: 15,
     active: 10,
     teamDeposit: 34000,
@@ -1453,7 +1405,7 @@ const teamData: Record<keyof typeof teamRates, {
     ],
   },
   3: {
-    title: "লেভেল ৩ ইনডাইরেক্ট টিম",
+    title: "লেভেল ৩ দল",
     members: 8,
     active: 4,
     teamDeposit: 16000,
@@ -1562,13 +1514,10 @@ function TeamPage({ action }: { action: (message: string) => void }) {
         </div>
         <div className="team-badges">
           <span>রেফারেল প্রোগ্রাম</span>
-          <small>● ৩ টিয়ার সিস্টেম</small>
+          <small>৩ স্তরের দল</small>
         </div>
-        <h1>সাফল্যের সঙ্গী (টিম ইনকাম)</h1>
-        <p>
-          বন্ধুদের আমন্ত্রণ জানান এবং ৩টি স্তর থেকে ডিপোজিট বোনাস ও দৈনিক প্রফিট কমিশন
-          অর্জন করুন।
-        </p>
+        <h1>সাফল্যের সঙ্গী</h1>
+        <p>আমন্ত্রণে বোনাস পান</p>
         <div className="team-summary-grid main">
           <div>
             <small>মোট রেফার ইনকাম</small>
@@ -1605,27 +1554,27 @@ function TeamPage({ action }: { action: (message: string) => void }) {
             <Icon name="share" size={20} />
           </span>
           <div>
-            <h2>আপনার আমন্ত্রণ লিংক</h2>
-            <p>শেয়ার করে নতুন মেম্বার যুক্ত করুন</p>
+            <h2>আমন্ত্রণ লিংক</h2>
+            <p>নতুন সদস্য আনুন</p>
           </div>
         </div>
-        <label>আমন্ত্রণ কোড (Invitation Code):</label>
+        <label>আমন্ত্রণ কোড</label>
         <div className="copy-field">
           <strong>BOROJAJ8996</strong>
           <button
-            onClick={() => copyText("BOROJAJ8996", "আমন্ত্রণ কোড কপি করা হয়েছে!")}
+            onClick={() => copyText("BOROJAJ8996", "কোড কপি হয়েছে")}
           >
             <Icon name="copy" size={15} /> কপি
           </button>
         </div>
-        <label>আমন্ত্রণ লিংক (Invitation Link):</label>
+        <label>আমন্ত্রণ লিংক</label>
         <div className="copy-field link-field">
           <span>https://borojaj.app/ref/BOROJAJ8996</span>
           <button
             onClick={() =>
               copyText(
                 "https://borojaj.app/ref/BOROJAJ8996",
-                "আমন্ত্রণ লিংক কপি করা হয়েছে!",
+                "লিংক কপি হয়েছে",
               )
             }
           >
@@ -1636,7 +1585,7 @@ function TeamPage({ action }: { action: (message: string) => void }) {
 
       <section className="team-levels">
         <h2>
-          <i /> টিম সদস্য ও কমিশন লেভেল
+          <i /> সদস্য ও কমিশন
         </h2>
         <div className="level-tabs">
           {([1, 2, 3] as const).map((item) => (
@@ -1740,11 +1689,11 @@ function TeamPage({ action }: { action: (message: string) => void }) {
 
       <section className="commission-rules">
         <h2>
-          <Icon name="gift" size={17} /> কমিশন যেভাবে হিসাব করা হয়:
+          <Icon name="gift" size={17} /> কমিশন হিসাব
         </h2>
         {[
-          ["wallet", "ডিপোজিট বোনাস (সদস্যের প্রতিটি ডিপোজিটে)", "বোনাস"],
-          ["chart", "দৈনিক প্রফিট কমিশন (সদস্যের প্রতিদিনের লাভে)", "কমিশন"],
+          ["wallet", "ডিপোজিট বোনাস", "বোনাস"],
+          ["chart", "দৈনিক কমিশন", "কমিশন"],
         ].map(([icon, title, label]) => (
           <div className="rule-group" key={title}>
             <h3>
@@ -1829,7 +1778,7 @@ function ProfilePage({
         ].map(([icon, label]) => (
           <button
             key={label}
-            onClick={() => action(`${label} নির্বাচন করা হয়েছে`)}
+            onClick={() => action(`${label} নির্বাচিত হয়েছে`)}
           >
             <span>
               <Icon name={icon} size={34} />
@@ -1850,7 +1799,7 @@ function ProfilePage({
       <button
         className="chat-button"
         aria-label="সহায়তা"
-        onClick={() => action("সহায়তা বার্তা খোলা হয়েছে")}
+        onClick={() => action("সহায়তা খোলা হয়েছে")}
       >
         <span>•••</span>
         <b>১</b>
@@ -1868,7 +1817,7 @@ function PlaceholderPage({ page }: { page: Page }) {
           <Icon name={current.icon} size={54} />
         </span>
         <h1>{current.label}</h1>
-        <p>এই বিভাগটি শীঘ্রই উন্মুক্ত হবে।</p>
+        <p>বিভাগ শীঘ্রই আসছে</p>
       </div>
     </main>
   )
@@ -1906,7 +1855,7 @@ export default function App() {
         ...current,
       ])
       setFixedDeposit(null)
-      showToast("স্থির সঞ্চয়ের মূলধন ও ২% লাভ ব্যবহারযোগ্য সঞ্চয়ে যুক্ত হয়েছে")
+      showToast("লাভ সঞ্চয়ে যুক্ত")
     }
 
     const remaining = fixedDeposit.maturesAt - Date.now()
@@ -1949,13 +1898,13 @@ export default function App() {
   const deposit = (amount: number) => {
     setBalance((current) => current + amount)
     addTransaction("সঞ্চয় জমা", amount, "credit")
-    showToast(`${money(amount)} সফলভাবে সঞ্চয়ে যুক্ত হয়েছে`)
+    showToast(`${money(amount)} জমা হয়েছে`)
   }
 
   const withdraw = (amount: number) => {
     setBalance((current) => current - amount)
     addTransaction("অর্থ উত্তোলন", amount, "debit")
-    showToast(`${money(amount)} উত্তোলন সফল হয়েছে`)
+    showToast(`${money(amount)} উত্তোলন হয়েছে`)
   }
 
   const activateFixedDeposit = () => {
@@ -1973,14 +1922,14 @@ export default function App() {
       expiresAt: expiryDateFromToday(7),
       maturesAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
     })
-    addTransaction("৭ দিনের স্থির সঞ্চয়ে স্থানান্তর", principal, "debit")
-    showToast("পূর্ণ সঞ্চয় ৭ দিনের জন্য নিরাপদে আবদ্ধ হয়েছে")
+    addTransaction("স্থির সঞ্চয় স্থানান্তর", principal, "debit")
+    showToast("সঞ্চয় নিরাপদে আবদ্ধ")
   }
 
   return (
     <div className="app blue-header">
       <AppHeader
-        onNotice={() => showToast("কোনো নতুন নোটিফিকেশন নেই")}
+        onNotice={() => showToast("নতুন নোটিফিকেশন নেই")}
         onProfile={() => changePage("profile")}
         page={page}
       />
@@ -2024,9 +1973,7 @@ export default function App() {
                 selectedPackage.durationDays,
               ),
             })
-            showToast(
-              `${selectedPackage.name} সক্রিয় হয়েছে—প্রাপ্তির নতুন অধ্যায় শুরু হলো`,
-            )
+            showToast(`${selectedPackage.name} সক্রিয় হয়েছে`)
             changePage("work")
           }}
         />

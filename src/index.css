@@ -3202,6 +3202,728 @@ button:active {
   }
 }
 
+/* Restructured package cards for অর্জনের পথ and কর্মক্ষেত্র. */
+.tier-package-card,
+.active-package-card {
+  position: relative;
+  padding: 14px;
+  overflow: hidden;
+  border: 1px solid #d9eaf6;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #fff, #f5faff);
+  box-shadow: 0 6px 16px rgba(12, 91, 145, .07);
+}
+
+.tier-package-card.suggested-package {
+  border-color: #80d3b2;
+  box-shadow: 0 0 0 2px rgba(13, 166, 109, .08);
+}
+
+.tier-package-head,
+.active-package-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tier-package-head .package-number,
+.active-package-head > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  height: 40px;
+  border-radius: 12px;
+  color: white;
+  background: linear-gradient(145deg, #0869cf, #08a8df);
+  box-shadow: 0 5px 12px rgba(0, 112, 201, .18);
+}
+
+.suggested-package .tier-package-head .package-number,
+.active-package-head > span {
+  background: linear-gradient(145deg, #12ad75, #078f61);
+}
+
+.tier-package-head .package-name,
+.active-package-head > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.tier-package-head .package-name span,
+.active-package-head h3 {
+  display: block;
+  color: #0b4f8a;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.tier-package-head .package-name small,
+.active-package-head small {
+  display: block;
+  margin-top: 2px;
+  color: #080808;
+  font-size: 12px;
+}
+
+.tier-package-tag,
+.active-package-head > b {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: #08704c;
+  background: #dff6eb;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tier-package-metrics,
+.active-package-metrics {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.active-package-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.tier-package-metrics > div,
+.active-package-metrics > div,
+.active-package-dates > div {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #deedf7;
+  border-radius: 11px;
+  background: #f8fcff;
+}
+
+.tier-package-metrics small,
+.tier-package-metrics strong,
+.active-package-metrics small,
+.active-package-metrics strong,
+.active-package-dates small,
+.active-package-dates strong {
+  display: block;
+}
+
+.tier-package-metrics small,
+.active-package-metrics small,
+.active-package-dates small {
+  color: #080808;
+  font-size: 12px;
+}
+
+.tier-package-metrics strong,
+.active-package-metrics strong,
+.active-package-dates strong {
+  margin-top: 3px;
+  color: #075fb4;
+  font-size: 15px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.tier-package-card > button {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 42px;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 11px;
+  color: white;
+  background: linear-gradient(135deg, #0871d2, #079edf);
+  box-shadow: 0 5px 13px rgba(0, 112, 201, .18);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.active-package-dates {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.package-recommendation p {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .tier-package-card,
+  .active-package-card {
+    padding: 12px;
+  }
+
+  .active-package-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .tier-package-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tier-package-metrics > div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .tier-package-tag,
+  .active-package-head > b {
+    padding: 4px 7px;
+    font-size: 11px;
+  }
+
+  .active-package-dates {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 350px) {
+  .tier-package-head,
+  .active-package-head {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .tier-package-tag,
+  .active-package-head > b {
+    margin-left: 50px;
+  }
+
+  .tier-package-metrics,
+  .active-package-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tier-package-metrics > div:last-child {
+    grid-column: auto;
+  }
+}
+
+/* Let section titles use the row before placing status badges below them. */
+.office-section-heading > div,
+.package-heading > div,
+.team-card-heading > div {
+  flex: 1 1 auto;
+}
+
+.office-section-heading > div > div,
+.package-heading > div > div,
+.team-card-heading > div {
+  min-width: 0;
+}
+
+@media (max-width: 420px) {
+  .office-section-heading,
+  .package-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .office-section-heading > button,
+  .office-section-heading > b,
+  .package-heading > b {
+    justify-self: start;
+    margin-left: 45px;
+  }
+
+  .office-stat-grid article,
+  .fixed-deposit-summary article,
+  .investment-metrics article {
+    display: flex;
+    min-height: 112px;
+    padding: 11px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .office-stat-grid article > span,
+  .fixed-deposit-summary article > span,
+  .investment-metrics article > span {
+    flex: 0 0 auto;
+    margin-bottom: 7px;
+  }
+
+  .office-stat-grid small,
+  .fixed-deposit-summary small,
+  .investment-metrics small {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 350px) {
+  .office-section-heading > button,
+  .office-section-heading > b,
+  .package-heading > b {
+    margin-left: 0;
+  }
+
+  .office-stat-grid article,
+  .fixed-deposit-summary article,
+  .investment-metrics article {
+    min-height: 82px;
+  }
+}
+
+/* Keep short interface copy balanced and intact at every width. */
+.app .page-content :is(h1, h2, h3, p, small, label, strong, b, li, button) {
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.app .page-content :is(h1, h2, h3, p) {
+  text-wrap: auto;
+}
+
+@media (max-width: 420px) {
+  .office-section-heading,
+  .package-heading,
+  .team-badges {
+    flex-wrap: wrap;
+  }
+
+  .office-section-heading > button,
+  .office-section-heading > b,
+  .package-heading > b {
+    margin-left: 45px;
+  }
+
+  .office-tools button {
+    grid-template-columns: 36px minmax(0, 1fr) 18px;
+  }
+
+  .office-tools button > b {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 351px) {
+  .office-section-heading :is(h2, p),
+  .office-tools :is(strong, small),
+  .package-heading :is(h2, p),
+  .team-card-heading :is(h2, p),
+  .work-history-title :is(h3, span) {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 350px) {
+  .office-section-heading :is(h2, p),
+  .office-tools :is(strong, small),
+  .package-heading :is(h2, p),
+  .team-card-heading :is(h2, p),
+  .work-history-title :is(h3, span) {
+    white-space: normal;
+  }
+
+  .office-section-heading > button,
+  .office-section-heading > b,
+  .package-heading > b {
+    margin-left: 0;
+  }
+}
+
+/* Final type hierarchy: tune each interface role instead of scaling blindly. */
+.office-welcome > span,
+.office-vip-pill {
+  font-size: 12px;
+}
+
+.office-welcome h1 {
+  font-size: clamp(24px, 5vw, 28px);
+}
+
+.office-welcome p {
+  font-size: 14px;
+}
+
+.office-balance small {
+  font-size: 13px;
+}
+
+.office-balance strong {
+  font-size: clamp(25px, 6vw, 30px);
+}
+
+.office-actions b {
+  font-size: 13px;
+}
+
+.fixed-deposit-copy > span {
+  font-size: 11px;
+}
+
+.fixed-deposit-copy h2 {
+  font-size: 16px;
+}
+
+.fixed-deposit-copy p {
+  font-size: 13px;
+}
+
+.fixed-deposit-card > button,
+.fixed-deposit-status small,
+.fixed-deposit-status strong {
+  font-size: 12px;
+}
+
+.fixed-deposit-summary small,
+.office-stat-grid small,
+.office-active-vip small {
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.fixed-deposit-summary strong,
+.office-stat-grid strong,
+.office-active-vip strong,
+.office-vip-badge span {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.office-section-heading h2 {
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.office-section-heading p {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.office-section-heading > button,
+.office-section-heading > b {
+  font-size: 12px;
+}
+
+.office-no-vip strong {
+  font-size: 15px;
+}
+
+.office-no-vip p {
+  margin-top: 2px;
+  font-size: 13px;
+}
+
+.office-transaction-list strong {
+  font-size: 14px;
+}
+
+.office-transaction-list small {
+  margin-top: 1px;
+  font-size: 12px;
+}
+
+.office-transaction-list article > b {
+  font-size: 14px;
+}
+
+/* The final three office cards need clear, readable header lines. */
+.office-tools {
+  gap: 8px;
+}
+
+.office-tools button {
+  min-height: 62px;
+  padding: 10px 11px;
+}
+
+.office-tools strong {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.office-tools small {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.earn-kicker {
+  font-size: 12px;
+}
+
+.earn-hero h1 {
+  font-size: clamp(23px, 5vw, 27px);
+}
+
+.earn-hero p {
+  font-size: 14px;
+}
+
+.earn-overview small {
+  font-size: 12px;
+}
+
+.earn-overview strong {
+  font-size: 17px;
+}
+
+.package-heading h2,
+.team-card-heading h2,
+.team-levels > h2 {
+  font-size: 18px;
+}
+
+.package-heading p,
+.team-card-heading p {
+  font-size: 13px;
+}
+
+.package-heading > b {
+  font-size: 12px;
+}
+
+.package-recommendation small {
+  font-size: 12px;
+}
+
+.package-recommendation strong {
+  font-size: 16px;
+}
+
+.package-recommendation p {
+  font-size: 13px;
+}
+
+.package-name span {
+  font-size: 16px;
+}
+
+.package-name small,
+.package-range small,
+.package-profit small,
+.investment-metrics small {
+  font-size: 12px;
+}
+
+.package-range strong,
+.package-profit strong,
+.investment-metrics strong {
+  font-size: 15px;
+}
+
+.vip-package button,
+.investment-status {
+  font-size: 13px;
+}
+
+.investment-empty h2 {
+  font-size: 19px;
+}
+
+.investment-empty p {
+  font-size: 14px;
+}
+
+.investment-empty button {
+  font-size: 14px;
+}
+
+.earn-note h2 {
+  font-size: 16px;
+}
+
+.earn-note p {
+  font-size: 13px;
+}
+
+.daily-profit-list strong {
+  font-size: 14px;
+}
+
+.daily-profit-list small {
+  font-size: 12px;
+}
+
+.daily-profit-list article > b {
+  font-size: 14px;
+}
+
+.work-savings-status small,
+.work-savings-metrics small,
+.work-savings-history article small {
+  font-size: 12px;
+}
+
+.work-savings-status strong,
+.work-savings-metrics strong,
+.work-savings-history article strong,
+.work-savings-history article > b {
+  font-size: 15px;
+}
+
+.team-badges span,
+.team-badges small {
+  font-size: 12px;
+}
+
+.team-summary h1 {
+  font-size: clamp(23px, 5vw, 27px);
+}
+
+.team-summary > p {
+  font-size: 14px;
+}
+
+.team-summary-grid small {
+  font-size: 12px;
+}
+
+.team-summary-grid strong {
+  font-size: 16px;
+}
+
+.invite-card label,
+.level-stats-head small,
+.level-income small,
+.member-total small {
+  font-size: 12px;
+}
+
+.copy-field > strong,
+.copy-field > span {
+  font-size: 14px;
+}
+
+.copy-field button,
+.level-tabs button {
+  font-size: 13px;
+}
+
+.level-tabs button span,
+.status {
+  font-size: 11px;
+}
+
+.level-stats-head strong,
+.level-income strong,
+.member-identity strong,
+.member-total strong {
+  font-size: 14px;
+}
+
+.level-stats-head > div:last-child strong {
+  font-size: 16px;
+}
+
+.member-identity p,
+.member-income p,
+.member-income b {
+  font-size: 12px;
+}
+
+.commission-rules > h2 {
+  font-size: 16px;
+}
+
+.rule-group h3 {
+  font-size: 14px;
+}
+
+.rule-group strong {
+  font-size: 13px;
+}
+
+.rule-group small {
+  font-size: 12px;
+}
+
+.stat-cell span:not(.small-icon) {
+  font-size: 13px;
+}
+
+.stat-cell strong {
+  font-size: clamp(15px, 3.5vw, 18px);
+}
+
+.quick-grid b {
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .office-section-heading h2,
+  .package-heading h2,
+  .team-card-heading h2,
+  .team-levels > h2 {
+    font-size: 17px;
+  }
+
+  .office-section-heading p,
+  .package-heading p,
+  .team-card-heading p,
+  .office-tools small {
+    font-size: 12px;
+  }
+
+  .office-tools strong {
+    font-size: 14px;
+  }
+
+  .office-tools button {
+    min-height: 58px;
+  }
+
+  .fixed-deposit-summary strong,
+  .office-stat-grid strong,
+  .office-active-vip strong,
+  .office-vip-badge span {
+    font-size: 14px;
+  }
+
+  .earn-hero p,
+  .team-summary > p {
+    font-size: 13px;
+  }
+
+  .package-name span {
+    font-size: 15px;
+  }
+
+  .package-range strong,
+  .package-profit strong,
+  .investment-metrics strong {
+    font-size: 14px;
+  }
+
+  .team-summary-grid strong {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 350px) {
+  .office-section-heading h2,
+  .package-heading h2,
+  .team-card-heading h2,
+  .team-levels > h2 {
+    font-size: 16px;
+  }
+
+  .office-tools strong,
+  .office-transaction-list strong,
+  .daily-profit-list strong {
+    font-size: 13px;
+  }
+
+  .office-tools small,
+  .office-transaction-list small,
+  .daily-profit-list small {
+    font-size: 11px;
+  }
+}
+
 @media (min-width: 700px) {
   .page-content {
     padding-right: 4vw;
@@ -3974,5 +4696,425 @@ button:active {
 
   .work-savings-history article > b {
     grid-column: 2;
+  }
+}
+
+/* Clear, accessible typography across the imported interface. */
+.app .page-content {
+  color: #080808;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.app .page-content h1 {
+  font-size: clamp(27px, 7vw, 32px);
+  line-height: 1.2;
+}
+
+.app .page-content h2 {
+  font-size: clamp(19px, 5vw, 22px);
+  line-height: 1.25;
+}
+
+.app .page-content h3 {
+  font-size: clamp(16px, 4.2vw, 18px);
+}
+
+.app .page-content p {
+  color: #080808;
+  font-size: clamp(14px, 3.8vw, 16px);
+  line-height: 1.55;
+}
+
+.app .page-content small:not(.status),
+.app .page-content label,
+.app .page-content li {
+  color: #080808;
+  font-size: clamp(13px, 3.4vw, 15px);
+  line-height: 1.45;
+}
+
+.app .page-content button {
+  font-size: clamp(13px, 3.5vw, 15px);
+}
+
+.app .page-content article > b,
+.app .page-content article > strong {
+  font-size: clamp(14px, 3.7vw, 16px);
+}
+
+.app .bottom-nav span {
+  color: #080808;
+  font-size: clamp(12px, 3.1vw, 14px);
+}
+
+.app .bottom-nav button.active span {
+  color: #0077c8;
+}
+
+.app .page-content :is(
+  .office-hero,
+  .earn-hero,
+  .team-summary,
+  .balance-card,
+  .fixed-deposit-balance,
+  .office-current-balance,
+  .office-vip-badge
+) :is(p, small, label, li) {
+  color: #fff;
+}
+
+.app-header small,
+.app-header span,
+.app-header b,
+.app-header em {
+  font-size: max(12px, 0.78em);
+}
+
+/* Responsive cleanup: balanced type and layouts without changing content. */
+html,
+body,
+#root,
+.app {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.app .page-content {
+  font-size: 15px;
+}
+
+.app .page-content h1 {
+  font-size: clamp(23px, 5vw, 28px);
+}
+
+.app .page-content h2 {
+  font-size: clamp(17px, 4vw, 20px);
+}
+
+.app .page-content h3 {
+  font-size: clamp(15px, 3.5vw, 17px);
+}
+
+.app .page-content p {
+  font-size: clamp(13px, 3vw, 15px);
+}
+
+.app .page-content small:not(.status),
+.app .page-content label,
+.app .page-content li {
+  font-size: clamp(12px, 2.7vw, 13px);
+}
+
+.app .page-content button {
+  font-size: clamp(12px, 3vw, 14px);
+}
+
+.app .page-content :is(p, small, strong, b, span, label, li, button) {
+  overflow-wrap: anywhere;
+}
+
+.app .bottom-nav span {
+  font-size: clamp(9px, 2.55vw, 11px);
+  line-height: 1.2;
+}
+
+@media (max-width: 600px) {
+  .page-content {
+    gap: 10px;
+    padding: 10px 10px 20px;
+  }
+
+  .app-header {
+    min-height: 78px;
+    padding: 9px 10px;
+  }
+
+  .header-profile {
+    gap: 8px;
+  }
+
+  .header-profile .avatar {
+    flex-basis: 44px;
+    height: 48px;
+    border-radius: 14px;
+  }
+
+  .header-profile .identity > small {
+    font-size: 10px;
+  }
+
+  .header-profile .identity strong {
+    font-size: 17px;
+  }
+
+  .header-profile .identity > span {
+    gap: 4px;
+    font-size: 10px;
+  }
+
+  .header-actions .notice-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .office-page,
+  .earn-page,
+  .team-page,
+  .home-page {
+    width: 100%;
+  }
+
+  .office-hero,
+  .earn-hero,
+  .team-summary,
+  .package-section,
+  .work-savings-card,
+  .daily-ledger,
+  .team-card,
+  .commission-rules,
+  .office-summary,
+  .office-vip-card,
+  .office-transactions,
+  .office-tools {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .office-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    padding: 8px;
+  }
+
+  .office-actions button {
+    min-height: 68px;
+  }
+
+  .office-actions b {
+    font-size: 12px;
+  }
+
+  .fixed-deposit-card {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 9px;
+    padding: 11px;
+  }
+
+  .fixed-deposit-card > button,
+  .fixed-deposit-status {
+    grid-column: 2;
+    justify-self: start;
+    min-width: 0;
+  }
+
+  .fixed-deposit-summary,
+  .office-active-vip,
+  .profile-finance-grid,
+  .work-savings-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .office-section-heading,
+  .package-heading {
+    align-items: flex-start;
+  }
+
+  .office-section-heading > button,
+  .office-section-heading > b,
+  .package-heading > b {
+    white-space: nowrap;
+  }
+
+  .package-main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+  }
+
+  .package-range {
+    text-align: left;
+  }
+
+  .vip-package button,
+  .investment-status {
+    min-width: 0;
+    min-height: 38px;
+  }
+
+  .daily-profit-list article,
+  .office-transaction-list article,
+  .work-savings-history article {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .daily-profit-list article > b,
+  .office-transaction-list article > b,
+  .work-savings-history article > b {
+    grid-column: 2;
+    justify-self: start;
+    white-space: normal;
+  }
+
+  .team-summary-grid strong,
+  .level-income strong,
+  .member-total strong,
+  .member-income p strong {
+    white-space: normal;
+  }
+
+  .level-stats-head {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .level-stats-head > div:last-child {
+    text-align: left;
+  }
+
+  .member-head {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .member-total {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  .purchase-modal-backdrop {
+    padding: 8px;
+  }
+
+  .purchase-modal {
+    max-height: calc(100dvh - 16px);
+    padding: 13px;
+    border-radius: 16px;
+  }
+
+  .bottom-nav {
+    height: 70px;
+  }
+
+  .bottom-nav button {
+    gap: 2px;
+    padding-inline: 1px;
+  }
+
+  .bottom-nav svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .app {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  }
+
+  .toast {
+    bottom: 82px;
+    max-width: calc(100% - 20px);
+    padding: 9px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  .header-profile .identity em {
+    display: none;
+  }
+
+  .earn-hero {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 9px;
+  }
+
+  .earn-hero-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .earn-overview > div {
+    padding-inline: 5px;
+  }
+
+  .fixed-deposit-projection,
+  .member-income {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .team-summary-grid.main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+    text-align: left;
+  }
+
+  .team-summary-grid.main > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 0;
+    border-right: 0;
+  }
+
+  .team-summary-grid.main strong {
+    margin-top: 0;
+    text-align: right;
+  }
+
+  .copy-field {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 9px;
+  }
+
+  .copy-field > strong,
+  .copy-field > span {
+    width: 100%;
+    white-space: normal;
+  }
+
+  .copy-field button {
+    align-self: flex-start;
+  }
+
+  .purchase-package-summary,
+  .investment-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .purchase-actions button {
+    min-width: 0;
+    padding-inline: 5px;
+  }
+}
+
+@media (max-width: 350px) {
+  .page-content {
+    padding-inline: 8px;
+  }
+
+  .header-profile .identity > small {
+    display: none;
+  }
+
+  .header-profile .identity strong {
+    font-size: 16px;
+  }
+
+  .office-stat-grid,
+  .fixed-deposit-summary,
+  .office-active-vip,
+  .profile-finance-grid,
+  .work-savings-metrics,
+  .level-income,
+  .rule-group > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .package-heading,
+  .office-section-heading {
+    flex-wrap: wrap;
   }
 }
